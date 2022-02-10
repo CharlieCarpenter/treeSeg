@@ -2,8 +2,8 @@
 
 // [[Rcpp::export]]
 
-List segTree_CC(arma::mat K, NumericVector R,
-                arma::mat mX, double s2, double df,
+List segTree_CC(NumericMatrix K, NumericVector R,
+                NumericMatrix mX, double s2, double df,
                 NumericVector lengths, 
                 List& tree, double q = NA_REAL, 
                 double alpha = 0.05, int fam = 0){
@@ -216,8 +216,8 @@ List segTree_CC(arma::mat K, NumericVector R,
             range[j]=1;
           }
           
-          optCost[Anc[i]]=mlCost_CC(X=mX.rows(range),
-                                    K=K.submat(range, range),
+          optCost[Anc[i]]=mlCost_CC(X=mX(range, _),
+                                    K=K(range, range),
                                     R = R[range], s2=s2, df=df);
         }
         else{

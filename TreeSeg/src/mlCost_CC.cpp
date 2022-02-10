@@ -1,15 +1,17 @@
 #include "treeseg.h"
 
 // [[Rcpp::export]]
-double mlCost_CC(arma::mat X, arma::mat K, NumericVector R,
+double mlCost_CC(NumericMatrix X, NumericMatrix K, NumericVector R,
                  double s2, double df, int fam){
   
   // Score Statistic
   
   // Projection Matrix
-  arma::mat I = eye(X.n_rows, X.n_rows);
-  arma::mat XtX = X.t() * X;
-  arma::mat P0 = I - X * inv_sympd(XtX) * X.t();
+  NumericMatrix I(X.nrow(),X.nrow());
+  I.fill_diag(1.0); // Identity Matrix
+
+  NumericMatrix XtX = transpose(X) * X;
+  NumericMatrix P0 = I - X * inv(XtX) * transpose(X);
   
   // if(fam == 0){
   //   for(int i = 0; i < n; i++){
@@ -20,7 +22,8 @@ double mlCost_CC(arma::mat X, arma::mat K, NumericVector R,
   if(fam == 1){
     arma::mat PKP = P0 * K * P0;
     double Q = R * PKP * R / s2*df;
+    double sqrtQ = sqrt(Q)
   }
   
-  return sqrt(Q);
+  return sqrtQ;
 }
