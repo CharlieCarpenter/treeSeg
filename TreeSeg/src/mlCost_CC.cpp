@@ -23,5 +23,5 @@ double mlCost_CC(arma::mat X, arma::mat K, arma::vec R,
     // double sqrtQ = sqrt(Q);
   }
   
-  return sqrt(Q;
+  return sqrt(Q);
 }
