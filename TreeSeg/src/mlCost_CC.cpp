@@ -7,9 +7,9 @@ double mlCost_CC(arma::mat X, arma::mat K, NumericVector R,
   // Score Statistic
   
   // Projection Matrix
-  arma::mat I = eye(mXm.n_row);
-  arma::mat XtX = mXm.t() * mXm;
-  arma::mat P0 = I - mXm * inv_sympd(XtX) * mXm.t();
+  arma::mat I = eye(X.n_row);
+  arma::mat XtX = X.t() * X;
+  arma::mat P0 = I - X * inv_sympd(XtX) * X.t();
   
   // if(fam == 0){
   //   for(int i = 0; i < n; i++){
