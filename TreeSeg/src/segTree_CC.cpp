@@ -2,8 +2,8 @@
 
 // [[Rcpp::export]]
 
-List segTree_CC(NumericMatrix K, NumericVector R,
-                NumericMatrix mX, double s2, double df,
+List segTree_CC(arma::mat K, arma::vec R,
+                arma::mat mX, double s2, double df,
                 NumericVector lengths, 
                 List& tree, double q = NA_REAL, 
                 double alpha = 0.05, int fam = 0){
@@ -11,7 +11,7 @@ List segTree_CC(NumericMatrix K, NumericVector R,
   int i, j, k, r, li, indN, indI, allInt, iRiS, iRiE, riS, riE; //ri
   IntegerVector startLi(0);
   
-  int n = R.length();
+  int n = R.n_rows;
   
   if(n == lengths.length()){
     // interval system with all lengths
@@ -33,7 +33,7 @@ List segTree_CC(NumericMatrix K, NumericVector R,
   }
   
   // generate multiscale bounds from stepR package
-  List bou = boundsCall(R, lengths, alpha, q, fam);
+  List bou = boundsCall_CC(R, lengths, alpha, q, fam);
   
   NumericVector lower = bou["lower"];                  
   NumericVector upper = bou["upper"];
@@ -216,9 +216,9 @@ List segTree_CC(NumericMatrix K, NumericVector R,
             range[j]=1;
           }
           
-          optCost[Anc[i]]=mlCost_CC(X=mX(range, _),
-                                    K=K(range, range),
-                                    R = R[range], s2=s2, df=df);
+          optCost[Anc[i]]=mlCost_CC(X=mX.rows(range),
+                                    K=K.submat(range, range),
+                                    R = R.rows(range), s2=s2, df=df);
         }
         else{
           //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
@@ -318,9 +318,9 @@ List segTree_CC(NumericMatrix K, NumericVector R,
                   range[k]=1;
                 }
 
-                double auxCost = mlCost_CC(X=mX(range, _),
-                                           K=K(range, range),
-                                           R = R[range], s2=s2, df=df);
+                double auxCost=mlCost_CC(X=mX.rows(range),
+                                         K=K.submat(range, range),
+                                         R = R.rows(range), s2=s2, df=df);
                 
                 for(k=0; k<auxComb.length(); k++){
                   auxCost = auxCost + optCost[auxComb[k]];
@@ -451,9 +451,9 @@ List segTree_CC(NumericMatrix K, NumericVector R,
               auxCost = auxCost + optCost[news[j]];
             }
             
-            auxCost = auxCost+mlCost_CC(X=mX(range, _),
-                                        K=K(range, range),
-                                        R = R[range], s2=s2, df=df);
+            auxCost = auxCost+mlCost_CC(X=mX.rows(range),
+                                        K=K.submat(range, range),
+                                        R = R.rows(range), s2=s2, df=df);
             cost.push_back(auxCost);
             
           }
@@ -661,9 +661,9 @@ List segTree_CC(NumericMatrix K, NumericVector R,
                     auxCost = auxCost + optCost[news[j]];
                   }
                 
-                  auxCost = auxCost + mlCost_CC(X=mX(range, _),
-                                                K=K(range, range),
-                                                R = R[range], s2=s2, df=df);
+                  auxCost = auxCost + mlCost_CC(X=mX.rows(range),
+                                                K=K.submat(range, range),
+                                                R = R.rows(range), s2=s2, df=df);
                   cost.push_back(auxCost);
                 }
               }
