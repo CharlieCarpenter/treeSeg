@@ -2,7 +2,7 @@
 
 // [[Rcpp::export]]
 
-List segTree_CC(arma::mat K, arma::fvec R,
+List segTree_CC(arma::mat K, NumericVector R,
                 arma::mat mX, double s2, double df,
                 NumericVector lengths, 
                 List& tree, double q = NA_REAL, 
@@ -11,7 +11,7 @@ List segTree_CC(arma::mat K, arma::fvec R,
   int i, j, k, r, li, indN, indI, allInt, iRiS, iRiE, riS, riE; //ri
   IntegerVector startLi(0);
   
-  int n = R.n_elem;
+  int n = R.length();
   
   if(n == lengths.length()){
     // interval system with all lengths
@@ -216,17 +216,9 @@ List segTree_CC(arma::mat K, arma::fvec R,
             range[j]=1;
           }
           
-          // Projection Matrix
-          arma::mat mXm = mX.rows(range);
-          arma::mat I = eye(mXm.n_row);
-          arma::mat XtX = mXm.t() * mXm;
-          arma::mat P0 = I - mXm * inv_sympd(XtX) * mXm.t();
-          
-          // Score Statistic
-          arma::mat PKP = P0 * K.submat(range, range) * P0;
-          double Q = R.rows(range).t() * PKP * R.rows() / s2*df;
-          
-          optCost[Anc[i]]=sqrt(Q);
+          optCost[Anc[i]]=mlCost_CC(X=mX.rows(range),
+                                    K=K.submat(range, range),
+                                    R = R[range], s2=s2, df=df);
         }
         else{
           //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
@@ -325,19 +317,11 @@ List segTree_CC(arma::mat K, arma::fvec R,
                 for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
                   range[k]=1;
                 }
+
+                double auxCost = mlCost_CC(X=mX.rows(range),
+                                           K=K.submat(range, range),
+                                           R = R[range], s2=s2, df=df);
                 
-                
-                // Projection Matrix
-                arma::mat mXm = mX.rows(range);
-                arma::mat I = eye(mXm.n_row);
-                arma::mat XtX = mXm.t() * mXm;
-                arma::mat P0 = I - mXm * inv_sympd(XtX) * mXm.t();
-                
-                // Score Statistic
-                arma::mat PKP = P0 * K.submat(range, range) * P0;
-                double Q = R.rows(range).t() * PKP * R.rows() / s2*df;
-                
-                double auxCost = sqrt(Q);
                 for(k=0; k<auxComb.length(); k++){
                   auxCost = auxCost + optCost[auxComb[k]];
                 }
@@ -467,17 +451,9 @@ List segTree_CC(arma::mat K, arma::fvec R,
               auxCost = auxCost + optCost[news[j]];
             }
             
-            // Projection Matrix
-            arma::mat mXm = mX.rows(range);
-            arma::mat I = eye(mXm.n_row);
-            arma::mat XtX = mXm.t() * mXm;
-            arma::mat P0 = I - mXm * inv_sympd(XtX) * mXm.t();
-            
-            // Score Statistic
-            arma::mat PKP = P0 * K.submat(range, range) * P0;
-            double Q = R.rows(range).t() * PKP * R.rows() / s2*df;
-            
-            auxCost = auxCost+sqrt(Q);
+            auxCost = auxCost+mlCost_CC(X=mX.rows(range),
+                                        K=K.submat(range, range),
+                                        R = R[range], s2=s2, df=df);
             cost.push_back(auxCost);
             
           }
@@ -684,18 +660,10 @@ List segTree_CC(arma::mat K, arma::fvec R,
                     }
                     auxCost = auxCost + optCost[news[j]];
                   }
-                  
-                  // Projection Matrix
-                  arma::mat mXm = mX.rows(range);
-                  arma::mat I = eye(mXm.n_row);
-                  arma::mat XtX = mXm.t() * mXm;
-                  arma::mat P0 = I - mXm * inv_sympd(XtX) * mXm.t();
-                  
-                  // Score Statistic
-                  arma::mat PKP = P0 * K.submat(range, range) * P0;
-                  double Q = R.rows(range).t() * PKP * R.rows() / s2*df;
-                  
-                  auxCost = auxCost + sqrt(Q);
+                
+                  auxCost = auxCost + mlCost_CC(X=mX.rows(range),
+                                                K=K.submat(range, range),
+                                                R = R[range], s2=s2, df=df);
                   cost.push_back(auxCost);
                 }
               }
