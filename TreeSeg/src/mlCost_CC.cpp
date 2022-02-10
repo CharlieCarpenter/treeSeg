@@ -20,7 +20,7 @@ double mlCost_CC(arma::mat X, arma::mat K, arma::vec R,
   
   if(fam == 1){
     arma::mat PKP = P0 * K * P0;
-    double Q += as_scalar(R.t() * PKP * R / s2*df);
+    Q += as_scalar(R.t() * PKP * R / s2*df);
     // double sqrtQ = sqrt(Q);
   }
   
