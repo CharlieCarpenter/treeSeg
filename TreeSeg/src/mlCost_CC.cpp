@@ -1,7 +1,7 @@
 #include "treeseg.h"
 
 // [[Rcpp::export]]
-double mlCost_CC(arma::mat X, arma::mat K, NumericVector R,
+double mlCost_CC(arma::mat X, arma::mat K, arma::vec R,
                  double s2, double df, int fam){
   
   // Score Statistic
