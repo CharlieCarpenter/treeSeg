@@ -318,8 +318,8 @@ List segTree_CC(NumericMatrix K, NumericVector R,
                   range[k]=1;
                 }
 
-                double auxCost = mlCost_CC(X=mX.rows(range),
-                                           K=K.submat(range, range),
+                double auxCost = mlCost_CC(X=mX(range, _),
+                                           K=K(range, range),
                                            R = R[range], s2=s2, df=df);
                 
                 for(k=0; k<auxComb.length(); k++){
@@ -451,8 +451,8 @@ List segTree_CC(NumericMatrix K, NumericVector R,
               auxCost = auxCost + optCost[news[j]];
             }
             
-            auxCost = auxCost+mlCost_CC(X=mX.rows(range),
-                                        K=K.submat(range, range),
+            auxCost = auxCost+mlCost_CC(X=mX(range, _),
+                                        K=K(range, range),
                                         R = R[range], s2=s2, df=df);
             cost.push_back(auxCost);
             
@@ -661,8 +661,8 @@ List segTree_CC(NumericMatrix K, NumericVector R,
                     auxCost = auxCost + optCost[news[j]];
                   }
                 
-                  auxCost = auxCost + mlCost_CC(X=mX.rows(range),
-                                                K=K.submat(range, range),
+                  auxCost = auxCost + mlCost_CC(X=mX(range, _),
+                                                K=K(range, range),
                                                 R = R[range], s2=s2, df=df);
                   cost.push_back(auxCost);
                 }
