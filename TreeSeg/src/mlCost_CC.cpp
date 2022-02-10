@@ -11,6 +11,7 @@ double mlCost_CC(arma::mat X, arma::mat K, arma::vec R,
   arma::mat XtX = X.t() * X;
   arma::mat P0 = I - X * inv_sympd(XtX) * X.t();
   
+  double Q = 0
   // if(fam == 0){
   //   for(int i = 0; i < n; i++){
   //     cost+= y[i];
@@ -19,7 +20,7 @@ double mlCost_CC(arma::mat X, arma::mat K, arma::vec R,
   
   if(fam == 1){
     arma::mat PKP = P0 * K * P0;
-    double Q = as_scalar(R.t() * PKP * R / s2*df);
+    double Q += as_scalar(R.t() * PKP * R / s2*df);
     // double sqrtQ = sqrt(Q);
   }
   
