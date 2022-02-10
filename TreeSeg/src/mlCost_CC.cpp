@@ -10,7 +10,7 @@ double mlCost_CC(NumericMatrix X, NumericMatrix K, NumericVector R,
   NumericMatrix I(X.nrow(),X.nrow());
   I.fill_diag(1.0); // Identity Matrix
 
-  NumericMatrix XtX = transpose(X) * X;
+  NumericMatrix XtX = transpose(X) %*% X;
   NumericMatrix P0 = I - X * inv(XtX) * transpose(X);
   
   // if(fam == 0){
