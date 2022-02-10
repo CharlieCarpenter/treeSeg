@@ -7,7 +7,7 @@ double mlCost_CC(arma::mat X, arma::mat K, NumericVector R,
   // Score Statistic
   
   // Projection Matrix
-  arma::mat I = eye(X.n_row);
+  arma::mat I = eye(X.n_rows, X.n_rows);
   arma::mat XtX = X.t() * X;
   arma::mat P0 = I - X * inv_sympd(XtX) * X.t();
   
@@ -19,7 +19,7 @@ double mlCost_CC(arma::mat X, arma::mat K, NumericVector R,
   
   if(fam == 1){
     arma::mat PKP = P0 * K * P0;
-    double Q = transpose(R) * PKP * R / s2*df
+    double Q = R * PKP * R / s2*df;
   }
   
   return sqrt(Q);
