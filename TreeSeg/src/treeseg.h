@@ -9,12 +9,14 @@ NumericMatrix addInMatrix(NumericVector vec, NumericMatrix M);
 arma::mat allComb(IntegerVector lengths);
 int ancestor(int node, List tree);
 List boundsCall(const Rcpp::NumericVector& x, const Rcpp::NumericVector& lengths, double alpha = 0.05, double q = NA_REAL, int fam = 0);
+List boundsCall_CC(const arma::vec x, const Rcpp::NumericVector& lengths, double alpha = 0.05, double q = NA_REAL, int fam);
 double bouPos(int li,int ri, int allInt, int liStart);
 NumericVector colSums(const arma::mat & X);
 List getNewCandidates(int subroot, int aN, List tree, IntegerVector minIVar, LogicalMatrix isOffMat, bool without = 0);
 IntegerVector getOffspringTip(int node, List tree);
 IntegerVector getOffspringTipB(int node, List tree);
 double mlCost(NumericVector y, int fam);
+double mlCost_CC(arma::mat X, arma::mat K, arma::vec R, double s2, double df, int fam):
 arma::umat mycombn(double n, double k);
 IntegerVector offspring(int node, List tree);
 IntegerVector offspringAll(int node, List tree);
