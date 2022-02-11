@@ -225,7 +225,7 @@ List segTree_CC(arma::mat K, arma::vec R,
           arma::uvec indices = arma::find(range>0);
           optCost[Anc[i]]=mlCost_CC(X=mXm.rows(indices),
                                     K=K.submat(indices, indices),
-                                    R = R.rows(indices), s2=s2, df=df);
+                                    R = R.rows(indices), s2, df, fam);
         }
         else{
           //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
@@ -331,7 +331,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                 double auxCost=mlCost_CC(X=mX.rows(indices),
                                          K=K.submat(indices, indices),
                                          R = R.rows(indices),
-                                         s2=s2, df=df);
+                                         s2, df, fam);
                 
                 for(k=0; k<auxComb.length(); k++){
                   auxCost = auxCost + optCost[auxComb[k]];
@@ -468,7 +468,7 @@ List segTree_CC(arma::mat K, arma::vec R,
             auxCost = auxCost+mlCost_CC(X=mX.rows(indices),
                                         K=K.submat(indices, indices),
                                         R = R.rows(indices),
-                                        s2=s2, df=df);
+                                        s2, df, fam);
             cost.push_back(auxCost);
             
           }
@@ -682,7 +682,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                   auxCost = auxCost + mlCost_CC(X=mX.rows(indices),
                                                 K=K.submat(indices, indices),
                                                 R = R.rows(indices),
-                                                s2=s2, df=df);
+                                                s2, df, fam);
                   cost.push_back(auxCost);
                 }
               }
