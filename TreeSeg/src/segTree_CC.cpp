@@ -1,10 +1,5 @@
 #include "treeseg.h"
 
-#include<RcppArmadillo.h>
-// [[Rcpp::depends(RcppArmadillo)]]
-using namespace Rcpp;
-using namespace arma;
-
 // [[Rcpp::export]]
 
 List segTree_CC(arma::mat K, arma::vec R,
@@ -216,16 +211,22 @@ List segTree_CC(arma::mat K, arma::vec R,
           minI[Anc[i]]=0;
           IntegerVector ncomb(0);
           comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
-          LogicalVector range(n);
+          // LogicalVector range(n);
+          // for(j=minoftb-1; j<maxoftb; j++){
+          //   range[j]=1;
+          // }
+          
+          arma::uvec indices(n);
           for(j=minoftb-1; j<maxoftb; j++){
-            range[j]=1;
+            indices.row(j).ones();
           }
+          
           // which rows are true to change from
           // LogicalVector to vector of indices
-          arma::uvec indices = arma::find(range>0);
-          optCost[Anc[i]]=mlCost_CC(X=mXm.rows(indices),
+          // arma::uvec indices = arma::find(range>0);
+          optCost[Anc[i]]=mlCost_CC(X=mX.rows(indices),
                                     K=K.submat(indices, indices),
-                                    R = R.rows(indices), s2, df, fam);
+                                    R=R.rows(indices), s2, df, fam);
         }
         else{
           //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
@@ -306,28 +307,41 @@ List segTree_CC(arma::mat K, arma::vec R,
                 
                 auxComb.sort();
                 ncomb.push_back(List::create(Named("comb")=auxComb, Named("minB")=minB, Named("maxB")=maxB));
-                
-                LogicalVector range(n);
-                
                 ofItb.sort();
                 
-                for(k = minoftb-1; k < ofItb[0]-1; k++){
-                  range[k]=1;
-                }
+                // LogicalVector range(n);
+                // for(k = minoftb-1; k < ofItb[0]-1; k++){
+                //   range[k]=1;
+                // }
+                // 
+                // for(r=0; r<(ofItb.length()-2)/2;r++){
+                //   for(k = ofItb[2*r+1]; k < ofItb[2*r+2]-1; k++){
+                //     range[k]=1;
+                //   }
+                // }
+                // 
+                // for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
+                //   range[k]=1;
+                // }
                 
+                arma::uvec indices(n);
+                for(k = minoftb-1; k < ofItb[0]-1; k++){
+                  indices.row(k).ones();
+                }
+
                 for(r=0; r<(ofItb.length()-2)/2;r++){
                   for(k = ofItb[2*r+1]; k < ofItb[2*r+2]-1; k++){
-                    range[k]=1;
+                    indices.row(k).ones();
                   }
                 }
                 
                 for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
-                  range[k]=1;
+                  indices.row(k).ones();
                 }
                 
                 // which rows are true to change from
                 // LogicalVector to vector of indices
-                arma::uvec indices = arma::find(range>0);
+                // arma::uvec indices = arma::find(range>0);
                 double auxCost=mlCost_CC(X=mX.rows(indices),
                                          K=K.submat(indices, indices),
                                          R = R.rows(indices),
@@ -447,24 +461,38 @@ List segTree_CC(arma::mat K, arma::vec R,
             
             news.sort();
             ncomb.push_back(List::create(Named("comb")=news, Named("minB")=minB, Named("maxB")=maxB));
-            LogicalVector range(n);
+            // LogicalVector range(n);
             double auxCost=0;
             
+            // for(j=minoftb-1; j<maxoftb; j++){
+            //   range[j]=1;
+            // }
+            // 
+            // for(j=0; j<news.length(); j++){
+            //   IntegerVector auxOff = getOffspringTip(news[j],tree);
+            //   for(k=0; k<auxOff.length(); k++){
+            //     range[auxOff[k]-1]=0;
+            //   }
+            //   auxCost = auxCost + optCost[news[j]];
+            // }
+            
+            arma::uvec indices(n);
             for(j=minoftb-1; j<maxoftb; j++){
-              range[j]=1;
+              indices.row(j).ones();
             }
             
             for(j=0; j<news.length(); j++){
               IntegerVector auxOff = getOffspringTip(news[j],tree);
               for(k=0; k<auxOff.length(); k++){
-                range[auxOff[k]-1]=0;
+                // range[auxOff[k]-1]=0;
+                indices.row(auxOff[k]-1).zeros();
               }
               auxCost = auxCost + optCost[news[j]];
             }
             
             // which rows are true to change from
             // LogicalVector to vector of indices
-            arma::uvec indices = arma::find(range>0);
+            // arma::uvec indices = arma::find(range>0);
             auxCost = auxCost+mlCost_CC(X=mX.rows(indices),
                                         K=K.submat(indices, indices),
                                         R = R.rows(indices),
@@ -661,24 +689,37 @@ List segTree_CC(arma::mat K, arma::vec R,
                   
                   news.sort();
                   ncomb.push_back(List::create(Named("comb")=news, Named("minB")=minB, Named("maxB")=maxB));
-                  LogicalVector range(n);
+                  // LogicalVector range(n);
                   double auxCost = 0;
                   
+                  // for(j = minoftb-1; j < maxoftb; j++){
+                  //   range[j] = 1;
+                  // }
+                  // 
+                  // for(j = 0; j < news.length(); j++){
+                  //   IntegerVector auxOff = getOffspringTip(news[j],tree);
+                  //   for(k=0; k < auxOff.length(); k++){
+                  //     range[auxOff[k]-1] = 0;
+                  //   }
+                  //   auxCost = auxCost + optCost[news[j]];
+                  // }
+                  
+                  arma::uvec indices(n);
                   for(j = minoftb-1; j < maxoftb; j++){
-                    range[j] = 1;
+                    indices.row(j).ones();
                   }
                   
                   for(j = 0; j < news.length(); j++){
                     IntegerVector auxOff = getOffspringTip(news[j],tree);
                     for(k=0; k < auxOff.length(); k++){
-                      range[auxOff[k]-1] = 0;
+                      indices.row(auxOff[k]-1).zeros()
                     }
                     auxCost = auxCost + optCost[news[j]];
                   }
                   
                   // which rows are true to change from
                   // LogicalVector to vector of indices
-                  arma::uvec indices = arma::find(range>0);
+                  // arma::uvec indices = arma::find(range>0);
                   auxCost = auxCost + mlCost_CC(X=mX.rows(indices),
                                                 K=K.submat(indices, indices),
                                                 R = R.rows(indices),
