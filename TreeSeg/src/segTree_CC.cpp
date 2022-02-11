@@ -217,7 +217,7 @@ List segTree_CC(arma::mat K, arma::vec R,
           }
           // which rows are true to change from
           // LogicalVector to vector of indices
-          arma::uvec indices = find(range[i]>0);
+          arma::uvec indices = arma::find(range[i]>0);
           optCost[Anc[i]]=mlCost_CC(X=mXm.rows(indices),
                                     K=K.submat(indices, indices),
                                     R = R.rows(indices), s2=s2, df=df);
@@ -322,7 +322,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                 
                 // which rows are true to change from
                 // LogicalVector to vector of indices
-                arma::uvec indices = find(range[i]>0);
+                arma::uvec indices = arma::find(range[i]>0);
                 double auxCost=mlCost_CC(X=mX.rows(indices),
                                          K=K.submat(indices, indices),
                                          R = R.rows(indices),
@@ -459,7 +459,7 @@ List segTree_CC(arma::mat K, arma::vec R,
             
             // which rows are true to change from
             // LogicalVector to vector of indices
-            arma::uvec indices = find(range[i]>0);
+            arma::uvec indices = arma::find(range[i]>0);
             auxCost = auxCost+mlCost_CC(X=mX.rows(indices),
                                         K=K.submat(indices, indices),
                                         R = R.rows(indices),
@@ -673,7 +673,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                   
                   // which rows are true to change from
                   // LogicalVector to vector of indices
-                  arma::uvec indices = find(range[i]>0);
+                  arma::uvec indices = arma::find(range[i]>0);
                   auxCost = auxCost + mlCost_CC(X=mX.rows(indices),
                                                 K=K.submat(indices, indices),
                                                 R = R.rows(indices),
