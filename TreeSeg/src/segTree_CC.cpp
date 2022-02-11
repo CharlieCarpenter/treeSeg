@@ -215,15 +215,12 @@ List segTree_CC(arma::mat K, arma::vec R,
           for(j=minoftb-1; j<maxoftb; j++){
             range[j]=1;
           }
-          
-          arma::mat mXm(n, mX.n_cols);
-          for(int i=0; i<n; i++){
-            mXm.row(i) = mX.row(range[i]);
-          }
-          
-          optCost[Anc[i]]=mlCost_CC(X=mXm,
-                                    K=K.submat(range, range),
-                                    R = R.rows(range), s2=s2, df=df);
+          // which rows are true to change from
+          // LogicalVector to vector of indices
+          arma::uvec indices = find(range[i]>0);
+          optCost[Anc[i]]=mlCost_CC(X=mXm.rows(indices),
+                                    K=K.submat(indices, indices),
+                                    R = R.rows(indices), s2=s2, df=df);
         }
         else{
           //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
@@ -323,14 +320,13 @@ List segTree_CC(arma::mat K, arma::vec R,
                   range[k]=1;
                 }
                 
-                arma::mat mXm(n, mX.n_cols);
-                for(int i=0; i<n; i++){
-                  mXm.row(i) = mX.row(range[i]);
-                }
-                
-                double auxCost=mlCost_CC(X=mXm,
-                                         K=K.submat(range, range),
-                                         R = R.rows(range), s2=s2, df=df);
+                // which rows are true to change from
+                // LogicalVector to vector of indices
+                arma::uvec indices = find(range[i]>0);
+                double auxCost=mlCost_CC(X=mX.rows(indices),
+                                         K=K.submat(indices, indices),
+                                         R = R.rows(indices),
+                                         s2=s2, df=df);
                 
                 for(k=0; k<auxComb.length(); k++){
                   auxCost = auxCost + optCost[auxComb[k]];
@@ -461,14 +457,13 @@ List segTree_CC(arma::mat K, arma::vec R,
               auxCost = auxCost + optCost[news[j]];
             }
             
-            arma::mat mXm(n, mX.n_cols);
-            for(int i=0; i<n; i++){
-              mXm.row(i) = mX.row(range[i]);
-            }
-            
-            auxCost = auxCost+mlCost_CC(X=mXm,
-                                        K=K.submat(range, range),
-                                        R = R.rows(range), s2=s2, df=df);
+            // which rows are true to change from
+            // LogicalVector to vector of indices
+            arma::uvec indices = find(range[i]>0);
+            auxCost = auxCost+mlCost_CC(X=mX.rows(indices),
+                                        K=K.submat(indices, indices),
+                                        R = R.rows(indices),
+                                        s2=s2, df=df);
             cost.push_back(auxCost);
             
           }
@@ -675,15 +670,14 @@ List segTree_CC(arma::mat K, arma::vec R,
                     }
                     auxCost = auxCost + optCost[news[j]];
                   }
-                
-                  arma::mat mXm(n, mX.n_cols);
-                  for(int i=0; i<n; i++){
-                    mXm.row(i) = mX.row(range[i]);
-                  }
                   
-                  auxCost = auxCost + mlCost_CC(X=mXm,
-                                                K=K.submat(range, range),
-                                                R = R.rows(range), s2=s2, df=df);
+                  // which rows are true to change from
+                  // LogicalVector to vector of indices
+                  arma::uvec indices = find(range[i]>0);
+                  auxCost = auxCost + mlCost_CC(X=mX.rows(indices),
+                                                K=K.submat(indices, indices),
+                                                R = R.rows(indices),
+                                                s2=s2, df=df);
                   cost.push_back(auxCost);
                 }
               }
