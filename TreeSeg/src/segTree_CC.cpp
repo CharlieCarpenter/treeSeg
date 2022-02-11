@@ -317,8 +317,13 @@ List segTree_CC(arma::mat K, arma::vec R,
                 for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
                   range[k]=1;
                 }
-
-                double auxCost=mlCost_CC(X=mX.rows(range),
+                
+                arma::mat mXm(n, mX.n_cols);
+                for(int i=0; i<n; i++){
+                  mXm.row(i) = mX.row(range[i]);
+                }
+                
+                double auxCost=mlCost_CC(X=mXm,
                                          K=K.submat(range, range),
                                          R = R.rows(range), s2=s2, df=df);
                 
@@ -451,7 +456,12 @@ List segTree_CC(arma::mat K, arma::vec R,
               auxCost = auxCost + optCost[news[j]];
             }
             
-            auxCost = auxCost+mlCost_CC(X=mX.rows(range),
+            arma::mat mXm(n, mX.n_cols);
+            for(int i=0; i<n; i++){
+              mXm.row(i) = mX.row(range[i]);
+            }
+            
+            auxCost = auxCost+mlCost_CC(X=mXm,
                                         K=K.submat(range, range),
                                         R = R.rows(range), s2=s2, df=df);
             cost.push_back(auxCost);
@@ -661,7 +671,12 @@ List segTree_CC(arma::mat K, arma::vec R,
                     auxCost = auxCost + optCost[news[j]];
                   }
                 
-                  auxCost = auxCost + mlCost_CC(X=mX.rows(range),
+                  arma::mat mXm(n, mX.n_cols);
+                  for(int i=0; i<n; i++){
+                    mXm.row(i) = mX.row(range[i]);
+                  }
+                  
+                  auxCost = auxCost + mlCost_CC(X=mXm,
                                                 K=K.submat(range, range),
                                                 R = R.rows(range), s2=s2, df=df);
                   cost.push_back(auxCost);
