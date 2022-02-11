@@ -224,9 +224,10 @@ List segTree_CC(arma::mat K, arma::vec R,
           // which rows are true to change from
           // LogicalVector to vector of indices
           // arma::uvec indices = arma::find(range>0);
-          optCost[Anc[i]]=mlCost_CC(X=mX.rows(indices),
-                                    K=K.submat(indices, indices),
-                                    R=R.rows(indices), s2, df, fam);
+          optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
+                                    K.submat(indices, indices),
+                                    R.rows(indices),
+                                    s2, df, fam);
         }
         else{
           //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
@@ -342,9 +343,9 @@ List segTree_CC(arma::mat K, arma::vec R,
                 // which rows are true to change from
                 // LogicalVector to vector of indices
                 // arma::uvec indices = arma::find(range>0);
-                double auxCost=mlCost_CC(X=mX.rows(indices),
-                                         K=K.submat(indices, indices),
-                                         R = R.rows(indices),
+                double auxCost=mlCost_CC(mX.rows(indices),
+                                         K.submat(indices, indices),
+                                         R.rows(indices),
                                          s2, df, fam);
                 
                 for(k=0; k<auxComb.length(); k++){
@@ -493,9 +494,9 @@ List segTree_CC(arma::mat K, arma::vec R,
             // which rows are true to change from
             // LogicalVector to vector of indices
             // arma::uvec indices = arma::find(range>0);
-            auxCost = auxCost+mlCost_CC(X=mX.rows(indices),
-                                        K=K.submat(indices, indices),
-                                        R = R.rows(indices),
+            auxCost = auxCost+mlCost_CC(mX.rows(indices),
+                                        K.submat(indices, indices),
+                                        R.rows(indices),
                                         s2, df, fam);
             cost.push_back(auxCost);
             
@@ -712,7 +713,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                   for(j = 0; j < news.length(); j++){
                     IntegerVector auxOff = getOffspringTip(news[j],tree);
                     for(k=0; k < auxOff.length(); k++){
-                      indices.row(auxOff[k]-1).zeros()
+                      indices.row(auxOff[k]-1).zeros();
                     }
                     auxCost = auxCost + optCost[news[j]];
                   }
@@ -720,9 +721,9 @@ List segTree_CC(arma::mat K, arma::vec R,
                   // which rows are true to change from
                   // LogicalVector to vector of indices
                   // arma::uvec indices = arma::find(range>0);
-                  auxCost = auxCost + mlCost_CC(X=mX.rows(indices),
-                                                K=K.submat(indices, indices),
-                                                R = R.rows(indices),
+                  auxCost = auxCost + mlCost_CC(mX.rows(indices),
+                                                K.submat(indices, indices),
+                                                R.rows(indices),
                                                 s2, df, fam);
                   cost.push_back(auxCost);
                 }
