@@ -216,7 +216,12 @@ List segTree_CC(arma::mat K, arma::vec R,
             range[j]=1;
           }
           
-          optCost[Anc[i]]=mlCost_CC(X=mX.rows(range),
+          arma::mat mXm(n, mX.n_cols);
+          for(int i=0; i<n; i++){
+            mXm.row(i) = mX.row(range[i]);
+          }
+          
+          optCost[Anc[i]]=mlCost_CC(X=mXm,
                                     K=K.submat(range, range),
                                     R = R.rows(range), s2=s2, df=df);
         }
