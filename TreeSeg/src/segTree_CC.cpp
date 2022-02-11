@@ -1,5 +1,8 @@
 #include "treeseg.h"
 
+#include<RcppArmadillo.h>
+using namespace arma;
+
 // [[Rcpp::export]]
 
 List segTree_CC(arma::mat K, arma::vec R,
