@@ -21,6 +21,10 @@ boundsCall <- function(x, lengths, alpha, q, fam) {
     .Call('_treeSeg_boundsCall', PACKAGE = 'treeSeg', x, lengths, alpha, q, fam)
 }
 
+boundsCall_CC <- function(x, lengths, alpha, q, fam) {
+    .Call('_treeSeg_boundsCall_CC', PACKAGE = 'treeSeg', x, lengths, alpha, q, fam)
+}
+
 colSums <- function(X) {
     .Call('_treeSeg_colSums', PACKAGE = 'treeSeg', X)
 }
@@ -53,6 +57,10 @@ getOffspringTipB <- function(node, tree) {
 
 mlCost <- function(y, fam) {
     .Call('_treeSeg_mlCost', PACKAGE = 'treeSeg', y, fam)
+}
+
+mlCost_CC <- function(X, K, R, s2, df, fam) {
+    .Call('_treeSeg_mlCost_CC', PACKAGE = 'treeSeg', X, K, R, s2, df, fam)
 }
 
 mycombn <- function(n, k) {
@@ -99,6 +107,10 @@ prepTree <- function(tree) {
 
 segTree <- function(y, lengths, tree, q = NA_real_, alpha = 0.05, fam = 0L) {
     .Call('_treeSeg_segTree', PACKAGE = 'treeSeg', y, lengths, tree, q, alpha, fam)
+}
+
+segTree_CC <- function(K, R, mX, s2, df, lengths, tree, q = NA_real_, alpha = 0.05, fam = 0L) {
+    .Call('_treeSeg_segTree_CC', PACKAGE = 'treeSeg', K, R, mX, s2, df, lengths, tree, q, alpha, fam)
 }
 
 sortComb <- function(ncomb, cost) {

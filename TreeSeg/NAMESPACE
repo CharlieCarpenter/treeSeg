@@ -3,6 +3,7 @@
 export(getOffspringTip)
 export(offspringAll)
 export(treeSeg)
+export(treeSeg_CC)
 export(treeTest)
 import(stepR)
 importFrom(Rcpp,evalCpp)
