@@ -352,7 +352,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                                          R.rows(indices),
                                          s2, df, fam);
                 } else{
-                  double auxCost = 0
+                  double auxCost = 0;
                 }
                 
                 for(k=0; k<auxComb.length(); k++){
