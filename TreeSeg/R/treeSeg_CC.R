@@ -59,9 +59,10 @@ treeSeg_CC<- function(formula.H0, data, K,
   
   mod <- lm(formula.H0, data = data)
   y <- mod$model[,1]
-  R <- mod$residuals
   mX <- model.matrix(mod)
-  df <- nrow(mX)-ncol(mX)
+  
+  R <- mod$residuals
+  df <- mod$df.residual
   s2 <- sum(R^2)/df
   
   if(missing(tipOrder)){
