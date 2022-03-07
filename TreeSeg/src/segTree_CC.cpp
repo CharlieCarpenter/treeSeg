@@ -221,13 +221,15 @@ List segTree_CC(arma::mat K, arma::vec R,
             indices.row(j).ones();
           }
           
-          // which rows are true to change from
-          // LogicalVector to vector of indices
-          // arma::uvec indices = arma::find(range>0);
-          optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
-                                    K.submat(indices, indices),
-                                    R.rows(indices),
-                                    s2, df, fam);
+          if(indices.n_elem >= 20){
+            // which rows are true to change from
+            // LogicalVector to vector of indices
+            // arma::uvec indices = arma::find(range>0);
+            optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
+                                      K.submat(indices, indices),
+                                      R.rows(indices),
+                                      s2, df, fam);
+          }
         }
         else{
           //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
@@ -343,10 +345,15 @@ List segTree_CC(arma::mat K, arma::vec R,
                 // which rows are true to change from
                 // LogicalVector to vector of indices
                 // arma::uvec indices = arma::find(range>0);
+                
+                if(indices.n_elem >= 20){
                 double auxCost=mlCost_CC(mX.rows(indices),
                                          K.submat(indices, indices),
                                          R.rows(indices),
                                          s2, df, fam);
+                } else{
+                  double auxCost = 0
+                }
                 
                 for(k=0; k<auxComb.length(); k++){
                   auxCost = auxCost + optCost[auxComb[k]];
@@ -491,15 +498,17 @@ List segTree_CC(arma::mat K, arma::vec R,
               auxCost = auxCost + optCost[news[j]];
             }
             
-            // which rows are true to change from
-            // LogicalVector to vector of indices
-            // arma::uvec indices = arma::find(range>0);
-            auxCost = auxCost+mlCost_CC(mX.rows(indices),
-                                        K.submat(indices, indices),
-                                        R.rows(indices),
-                                        s2, df, fam);
-            cost.push_back(auxCost);
+            if(indices.n_elem >= 20){
+              // which rows are true to change from
+              // LogicalVector to vector of indices
+              // arma::uvec indices = arma::find(range>0);
+              auxCost = auxCost+mlCost_CC(mX.rows(indices),
+                                          K.submat(indices, indices),
+                                          R.rows(indices),
+                                          s2, df, fam);
+            }
             
+            cost.push_back(auxCost);
           }
         }
         if(ncomb.length() > 0){
@@ -718,13 +727,16 @@ List segTree_CC(arma::mat K, arma::vec R,
                     auxCost = auxCost + optCost[news[j]];
                   }
                   
-                  // which rows are true to change from
-                  // LogicalVector to vector of indices
-                  // arma::uvec indices = arma::find(range>0);
-                  auxCost = auxCost + mlCost_CC(mX.rows(indices),
-                                                K.submat(indices, indices),
-                                                R.rows(indices),
-                                                s2, df, fam);
+                  if(indices.n_elem >= 20){
+                    // which rows are true to change from
+                    // LogicalVector to vector of indices
+                    // arma::uvec indices = arma::find(range>0);
+                    auxCost = auxCost + mlCost_CC(mX.rows(indices),
+                                                  K.submat(indices, indices),
+                                                  R.rows(indices),
+                                                  s2, df, fam);
+                  }
+                  
                   cost.push_back(auxCost);
                 }
               }
