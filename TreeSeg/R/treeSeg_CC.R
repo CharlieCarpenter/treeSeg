@@ -55,7 +55,8 @@
 
 treeSeg_CC<- function(formula.H0, data, K,
                       tree, q, alpha, fam, 
-                      tipOrder, lengths, checkOrder = TRUE){
+                      tipOrder, lengths, checkOrder = TRUE,
+                      maxGrp = 100){
   
   mod <- lm(formula.H0, data = data)
   y <- mod$model[,1]
@@ -161,14 +162,14 @@ treeSeg_CC<- function(formula.H0, data, K,
     }
   }
   
-  if(!is.element(lengths, c("all", "dyadic"))){
+  if(!is.element(lengths, c("all", "dyadic", "kernel"))){
     warning("lengths can only be all or dyadic.")
     lengths <- "dyadic"
   }
   
   if(lengths == "all"){
     lengths <- 1:length(y)
-  }else{
+  }else if(lengths == 'dyadic'){
     #dyadic lengths
     lengths <- c()
     i <- 0
@@ -176,6 +177,18 @@ treeSeg_CC<- function(formula.H0, data, K,
       lengths <- c(lengths, 2^i)
       i <- i + 1
     }
+  }else{
+    ## Only including clades with >= 20 subjects
+    ## lengths = "kernel"
+    
+    hh <- seq(from=min(tree$height), to=max(tree$height),
+              length.out=maxGrp)
+    ct <- cutree(tree, h = hh)
+    act <- apply(ct, 2, function(x) any(table(x)<20))
+    ct20 <- table(ct[,sum(act)+1])
+    
+    ## So segTree doesn't have to be updated we do 2^l
+    lengths <- 2^(seq(0,length(ct20)))
   }
   
   #run treeSeg algorithm
