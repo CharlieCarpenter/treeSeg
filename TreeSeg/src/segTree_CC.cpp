@@ -220,6 +220,7 @@ List segTree_CC(arma::mat K, arma::vec R,
             indices.row(j).ones();
           }
           
+          if(sum(indices) >= 20){
           // which rows are true to change from
           // LogicalVector to vector of indices
           // arma::uvec indices = arma::find(range>0);
@@ -227,6 +228,9 @@ List segTree_CC(arma::mat K, arma::vec R,
                                     K.submat(indices, indices),
                                     R.rows(indices),
                                     s2, df, fam);
+          } else{
+            optCost[Anc[i]]=0;
+          }
         }
         else{
           //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
@@ -343,10 +347,16 @@ List segTree_CC(arma::mat K, arma::vec R,
                 // LogicalVector to vector of indices
                 // arma::uvec indices = arma::find(range>0);
                 
-                double auxCost=mlCost_CC(mX.rows(indices),
-                                         K.submat(indices, indices),
-                                         R.rows(indices),
-                                         s2, df, fam);
+                double auxCost;
+                
+                if(sum(indices)>=20){
+                  auxCost=mlCost_CC(mX.rows(indices),
+                                    K.submat(indices, indices),
+                                    R.rows(indices),
+                                    s2, df, fam);
+                }else{
+                  auxCost=0;
+                }
 
                 for(k=0; k<auxComb.length(); k++){
                   auxCost = auxCost + optCost[auxComb[k]];
@@ -491,6 +501,7 @@ List segTree_CC(arma::mat K, arma::vec R,
               auxCost = auxCost + optCost[news[j]];
             }
             
+            if(sum(indices)>=20){
             // which rows are true to change from
             // LogicalVector to vector of indices
             // arma::uvec indices = arma::find(range>0);
@@ -498,7 +509,9 @@ List segTree_CC(arma::mat K, arma::vec R,
                                         K.submat(indices, indices),
                                         R.rows(indices),
                                         s2, df, fam);
-            
+            }else{
+              auxCost = 0;
+            }
             cost.push_back(auxCost);
           }
         }
@@ -718,6 +731,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                     auxCost = auxCost + optCost[news[j]];
                   }
                   
+                  if(sum(indices)>=20){
                   // which rows are true to change from
                   // LogicalVector to vector of indices
                   // arma::uvec indices = arma::find(range>0);
@@ -725,7 +739,9 @@ List segTree_CC(arma::mat K, arma::vec R,
                                                 K.submat(indices, indices),
                                                 R.rows(indices),
                                                 s2, df, fam);
-                  
+                  }else{
+                    auxCost = 0;
+                  }
                   cost.push_back(auxCost);
                 }
               }
