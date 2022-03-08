@@ -182,7 +182,7 @@ treeSeg_CC<- function(formula.H0, data, K,
     ## Only including clades with >= 20 subjects
     ## lengths = "kernel"
     
-    tr <- stats::as.hclust(tree)
+    tr <- stats::as.hclust(tree) 
     hh <- seq(from=min(tr$height), to=max(tr$height),
               length.out=maxGrp)
     ct <- cutree(tr, h = hh)
