@@ -13,8 +13,9 @@ treeSeg_CC(
   alpha,
   fam,
   tipOrder,
-  lengths,
-  checkOrder = TRUE
+  lengths = c("all", "dyadic", "kernel"),
+  checkOrder = TRUE,
+  maxGrp = 100
 )
 }
 \arguments{

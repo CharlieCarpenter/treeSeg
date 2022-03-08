@@ -55,7 +55,8 @@
 
 treeSeg_CC<- function(formula.H0, data, K,
                       tree, q, alpha, fam, 
-                      tipOrder, lengths, checkOrder = TRUE,
+                      tipOrder, lengths = c("all", "dyadic", "kernel"),
+                      checkOrder = TRUE,
                       maxGrp = 100){
   
   mod <- lm(formula.H0, data = data)
