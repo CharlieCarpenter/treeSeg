@@ -190,7 +190,7 @@ treeSeg_CC<- function(formula.H0, data, K,
     ct20 <- table(ct[,sum(act)+1])
     
     ## So segTree doesn't have to be updated we do 2^l
-    lengths <- 2^(seq(0,length(ct20)))
+    lengths <- 2^seq.int(0,length(ct20))
   }
   
   #run treeSeg algorithm
