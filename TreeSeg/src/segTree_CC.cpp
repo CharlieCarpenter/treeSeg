@@ -748,9 +748,10 @@ List segTree_CC(arma::mat K, arma::vec R,
         }
       } else{
         // Skipping the test for clade size < 20
-        minI[i] = 0;
-        comb[i] = List::create(List::create(Named("comb")=empty, Named("minB")=empty, Named("maxB")=empty));
-        optCost[i] = 0;
+        minI[Anc[i]] = 0;
+        IntegerVector ncomb(0);
+        comb[Anc[i]] = List::create(List::create(Named("comb")=ncomb, Named("minB")=0, Named("maxB")=0));
+        optCost[Anc[i]] = 0;
       }
     }
     
