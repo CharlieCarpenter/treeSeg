@@ -161,323 +161,61 @@ List segTree_CC(arma::mat K, arma::vec R,
       // only calculating for indices of size >=20
       
       if(maxoftb-minoftb >= 20){
-      if(is_true(all(minII==0))){
-        //both offsprings have no active nodes
-        
-        double maxB = min(lower);         //initialize maximum of lower bounds
-        double minB = max(upper);         //initialize minimum of upper bounds
-        
-        for(j=0; j < off.length(); j++){
-          List auxcomb=combI[j];
-          List onlyauxcomb=auxcomb[0];
-          double maxaux=onlyauxcomb["maxB"];
-          double minaux=onlyauxcomb["minB"];
-          maxB=std::max(maxB, maxaux);
-          minB=std::min(minB, minaux);
+        if(is_true(all(minII==0))){
+          //both offsprings have no active nodes
           
-          if(j < off.length()-1){
-            //intersect with overlapping bounds from two offsprings
+          double maxB = min(lower);         //initialize maximum of lower bounds
+          double minB = max(upper);         //initialize minimum of upper bounds
+          
+          for(j=0; j < off.length(); j++){
+            List auxcomb=combI[j];
+            List onlyauxcomb=auxcomb[0];
+            double maxaux=onlyauxcomb["maxB"];
+            double minaux=onlyauxcomb["minB"];
+            maxB=std::max(maxB, maxaux);
+            minB=std::min(minB, minaux);
             
-            for(li = oftb[2*j]; li <= oftb[2*j+1]; li++){
+            if(j < off.length()-1){
+              //intersect with overlapping bounds from two offsprings
               
-              riS = std::max(oftb[2*j+2], li);        //start value for right bound
-              riE = maxoftb;                          //end value for right bound
-              
-              IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths); //indeces in lengths vector for right and left bound
-              
-              iRiS = iRi[0];
-              iRiE = iRi[1];
-              
-              for(int i1 = iRiS; i1 <= iRiE; i1++){
-                //only loop over bounds of length in lengths
+              for(li = oftb[2*j]; li <= oftb[2*j+1]; li++){
                 
-                //ri = li - 1 + lengths[i1];
-                //int ind = bouPos(li, ri, allInt, startLi[li-1]);
+                riS = std::max(oftb[2*j+2], li);        //start value for right bound
+                riE = maxoftb;                          //end value for right bound
                 
-                int ind = startLi[li - 1] + i1;
+                IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths); //indeces in lengths vector for right and left bound
                 
-                if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                maxB=std::max(maxB, lower[ind]);
-                minB=std::min(minB, upper[ind]);
-                }
+                iRiS = iRi[0];
+                iRiE = iRi[1];
                 
-              }
-            }
-          }
-          
-        }
-        
-        if(minB>=maxB){
-          //multiscale constraint satisfied, no active node needed
-          
-          minI[Anc[i]]=0;
-          IntegerVector ncomb(0);
-          comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
-          // LogicalVector range(n);
-          // for(j=minoftb-1; j<maxoftb; j++){
-          //   range[j]=1;
-          // }
-          
-          arma::uvec indices(n);
-          for(j=minoftb-1; j<maxoftb; j++){
-            indices.row(j).ones();
-          }
-          
-          // which rows are true to change from
-          // LogicalVector to vector of indices
-          // arma::uvec indices = arma::find(range>0);
-          optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
-                                    K.submat(indices, indices),
-                                    R.rows(indices),
-                                    s2, df, fam);
-        }
-        else{
-          //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
-          
-          int minItest=0;
-          
-          while(minI[Anc[i]] == NA){
-            minItest = minItest+1;          //current number of active nodes
-            
-            
-            List ncomb(0);
-            NumericVector cost(0);
-            
-            IntegerVector minIVar=clone(minI);
-            minIVar[Anc[i]]=0;
-            
-            List combNew = getNewCandidates(Anc[i], minItest, tree, minIVar, isOffMat,1); //get all possible candiates for new active nodes
-            
-            if(combNew.length() == 0){
-              //Problem size too large (too many possible candidates) 
-              // to avoid memory issue stop calculations. 
-              // Change maxSize in getNewCandidates to increase feasible problem size.
-              return(combNew);
-            }
-            
-            
-            for(j=0; j<combNew.length(); j++){
-              //check for all new candiates whether multiscale constraint can be fulfilled
-              
-              IntegerVector auxComb = combNew[j];
-              IntegerMatrix ofItb(auxComb.length(),2); //boundary of non-important offspring area of Anc[i]
-              
-              double maxB = min(lower);
-              double minB = max(upper);
-              
-              
-              for(k=0; k<auxComb.length(); k++){
-                //intersect bounds of non-important offsping area of Anc[i] (which is not in influence region of potential active node)
-                IntegerVector auxB = getOffspringTipB(auxComb[k], tree);
-                
-                ofItb(k,0)=auxB[0];
-                ofItb(k,1)=auxB[1];
-                
-                for(li = minoftb; li <= maxoftb; li++){
+                for(int i1 = iRiS; i1 <= iRiE; i1++){
+                  //only loop over bounds of length in lengths
                   
-                  int riMax = maxoftb;
-                  if(li <= auxB[1]){
-                    riMax = std::min(riMax, auxB[0] - 1);
+                  //ri = li - 1 + lengths[i1];
+                  //int ind = bouPos(li, ri, allInt, startLi[li-1]);
+                  
+                  int ind = startLi[li - 1] + i1;
+                  
+                  if(ind >= 0){ //when no bounds exists for this interval ind = -1
+                  maxB=std::max(maxB, lower[ind]);
+                  minB=std::min(minB, upper[ind]);
                   }
                   
-                  riS = li;
-                  riE = riMax;
-                  
-                  IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
-                  
-                  iRiS = iRi[0];
-                  iRiE = iRi[1];
-                  
-                  
-                  for(int i1 = iRiS; i1 <= iRiE; i1++){
-                    
-                    //ri = li - 1 + lengths[i1];
-                    //int ind = bouPos(li, ri, allInt, startLi[li-1]);
-                    
-                    int ind = startLi[li - 1] + i1;
-                    
-                    if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                    maxB = std::max(maxB, lower[ind]);
-                    minB = std::min(minB, upper[ind]);
-                    
-                    }
-                  }
-                }
-              }
-              
-              if(minB >= maxB){
-                //candidiate gives valid solution, add this to list of all valid solutions
-                
-                auxComb.sort();
-                ncomb.push_back(List::create(Named("comb")=auxComb, Named("minB")=minB, Named("maxB")=maxB));
-                ofItb.sort();
-                
-                // LogicalVector range(n);
-                // for(k = minoftb-1; k < ofItb[0]-1; k++){
-                //   range[k]=1;
-                // }
-                // 
-                // for(r=0; r<(ofItb.length()-2)/2;r++){
-                //   for(k = ofItb[2*r+1]; k < ofItb[2*r+2]-1; k++){
-                //     range[k]=1;
-                //   }
-                // }
-                // 
-                // for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
-                //   range[k]=1;
-                // }
-                
-                arma::uvec indices(n);
-                for(k = minoftb-1; k < ofItb[0]-1; k++){
-                  indices.row(k).ones();
-                }
-
-                for(r=0; r<(ofItb.length()-2)/2;r++){
-                  for(k = ofItb[2*r+1]; k < ofItb[2*r+2]-1; k++){
-                    indices.row(k).ones();
-                  }
-                }
-                
-                for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
-                  indices.row(k).ones();
-                }
-                
-                // which rows are true to change from
-                // LogicalVector to vector of indices
-                // arma::uvec indices = arma::find(range>0);
-                
-                double auxCost=mlCost_CC(mX.rows(indices),
-                                    K.submat(indices, indices),
-                                    R.rows(indices),
-                                    s2, df, fam);
-                
-                for(k=0; k<auxComb.length(); k++){
-                  auxCost = auxCost + optCost[auxComb[k]];
-                }
-                
-                cost.push_back(auxCost);
-                
-              }
-            }
-            if(ncomb.length()>0){
-              //Valid solutions found.
-              
-              minI[Anc[i]] = minItest;
-              sortComb(ncomb,cost);
-              comb[Anc[i]]=ncomb;
-              optCost[Anc[i]]=cost[0];
-              
-            }
-          }
-        }
-      }
-      else{
-        //offsprings do have some active nodes
-        //first, check feasibility of all combinations of valid solutions from offsprings
-        
-        List ncomb(0);
-        NumericVector cost(0);
-        
-        IntegerVector auxLengths(combI.length());
-        
-        
-        for(j=0; j<combI.length(); j++){
-          List auxcomb = combI[j];  //valid solutions of offspring j
-          auxLengths[j] = auxcomb.length(); //number of valid solutions of offspring j
-        }
-        
-        arma:: mat newsI = allComb(auxLengths); //possible combinations of valid solutions of individual offsprings
-        
-        for(indN = 0; (unsigned)indN < newsI.n_rows; indN++){
-          IntegerVector news(0);
-          IntegerVector ofItb(0);
-          double maxB = min(lower);
-          double minB = max(upper);
-          
-          
-          for(j = 0; (unsigned)j < newsI.n_cols; j++){
-            List auxcombs = combI[j];
-            List auxcomb = auxcombs[newsI(indN,j)-1];
-            List onlyAuxComb = auxcomb[0]; //current combination of active nodes under consideration
-            
-            for(k=0; k<onlyAuxComb.length(); k++){
-              IntegerVector auxBounds = getOffspringTipB(onlyAuxComb[k], tree);
-              
-              news.push_back(onlyAuxComb[k]);
-              ofItb.push_back(auxBounds[0]);
-              ofItb.push_back(auxBounds[1]);
-            }
-            
-            
-            maxB = std::max(maxB, as<double>(auxcomb[2])); //get multiscale lower bound for ANs of current combination
-            minB = std::min(minB, as<double>(auxcomb[1])); //get multiscale upper bound for ANs of current combination
-          }
-          ofItb.sort();
-          
-          
-          for(j=0; j < off.length()-1; j++){
-            //get indeces of intervals of non-important region
-            IntegerVector subaux1 = ofItb[ofItb <= oftb[2*j+1]];
-            IntegerVector subaux2 = ofItb[ofItb >= oftb[2*j+2]];
-            
-            int liStart;
-            if(subaux1.size() == 0){
-              liStart = oftb[2*j];
-            }else{
-              liStart = std::max(max(subaux1)+1, oftb[2*j]);
-            }
-            
-            int riEnd;
-            if(subaux2.size() == 0){
-              riEnd = oftb[2*j+3];
-            }else{
-              riEnd = std::min(min(subaux2) - 1, oftb[2*j+3]);
-            }
-            
-            for(li = liStart; li <= oftb[2*j+1]; li++){
-              //intersect with bounds on non-important region (not in influence region of ANs)
-              
-              riS = std::max(oftb[2*j+1]+1, li);
-              riE = riEnd;
-              
-              IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
-              
-              iRiS = iRi[0];
-              iRiE = iRi[1];
-              
-              for(int i1 = iRiS; i1 <= iRiE; i1++){
-                
-                //ri = li - 1 + lengths[i1];
-                //int ind = bouPos(li, ri, allInt, startLi[li-1]);
-                
-                int ind = startLi[li - 1] + i1;
-                
-                if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                maxB=std::max(maxB, lower[ind]);
-                minB=std::min(minB, upper[ind]);
                 }
               }
             }
+            
           }
           
-          if(minB >= maxB){
-            //current candidate is valid solution, add to list of valid solutions
+          if(minB>=maxB){
+            //multiscale constraint satisfied, no active node needed
             
-            news.sort();
-            ncomb.push_back(List::create(Named("comb")=news, Named("minB")=minB, Named("maxB")=maxB));
+            minI[Anc[i]]=0;
+            IntegerVector ncomb(0);
+            comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
             // LogicalVector range(n);
-            double auxCost=0;
-            
             // for(j=minoftb-1; j<maxoftb; j++){
             //   range[j]=1;
-            // }
-            // 
-            // for(j=0; j<news.length(); j++){
-            //   IntegerVector auxOff = getOffspringTip(news[j],tree);
-            //   for(k=0; k<auxOff.length(); k++){
-            //     range[auxOff[k]-1]=0;
-            //   }
-            //   auxCost = auxCost + optCost[news[j]];
             // }
             
             arma::uvec indices(n);
@@ -485,156 +223,65 @@ List segTree_CC(arma::mat K, arma::vec R,
               indices.row(j).ones();
             }
             
-            for(j=0; j<news.length(); j++){
-              IntegerVector auxOff = getOffspringTip(news[j],tree);
-              for(k=0; k<auxOff.length(); k++){
-                // range[auxOff[k]-1]=0;
-                indices.row(auxOff[k]-1).zeros();
-              }
-              auxCost = auxCost + optCost[news[j]];
-            }
-            
-            
             // which rows are true to change from
             // LogicalVector to vector of indices
             // arma::uvec indices = arma::find(range>0);
-            auxCost = auxCost+mlCost_CC(mX.rows(indices),
-                                        K.submat(indices, indices),
-                                        R.rows(indices),
-                                        s2, df, fam);
-
-            cost.push_back(auxCost);
+            optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
+                                      K.submat(indices, indices),
+                                      R.rows(indices),
+                                      s2, df, fam);
           }
-        }
-        if(ncomb.length() > 0){
-          //Valid solutions were found, no additional active node needs to be added
-          
-          int auxMinI = 0;
-          for(j=0; j<off.length(); j++){
-            auxMinI = auxMinI+minI[off[j]]; 
-          }
-          minI[Anc[i]]=auxMinI;
-          sortComb(ncomb,cost);
-          comb[Anc[i]]=ncomb;
-          optCost[Anc[i]]=cost[0];
-        }
-        else{
-          //No valid solutions were found, additional active node needs to be added
-          
-          //printf("No valid solutions were found, additional active node.\n");
-          
-          int minITest = 0;
-          int addNodes = 0;
-          
-          for(j = 0; j < off.length(); j++){
-            minITest = minITest + minI[off[j]]; 
-          }
-          while(minI[Anc[i]] == NA){
+          else{
+            //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
             
-            addNodes = addNodes + 1;
-            minITest = minITest + addNodes;               //current number of active nodes to be tested
+            int minItest=0;
             
-            umat indAddNodes = mycombn(off.length(), addNodes);   //all combinations at which offspring node active node gets added
-            
-            
-            for(indI = 0; (unsigned)indI < indAddNodes.n_cols; indI++){
-              //check solutions with AN added at indI
+            while(minI[Anc[i]] == NA){
+              minItest = minItest+1;          //current number of active nodes
               
               
-              int auxInd = 0; //number of active nodes added
-              List newsComb(off.length()); //all combinations for different offsprings
-              IntegerVector auxLengths(off.length());
+              List ncomb(0);
+              NumericVector cost(0);
               
-              for(j = 0; j < off.length(); j++){
-                
-                if(((unsigned) auxInd < indAddNodes.n_rows) && (((unsigned) j+1) == indAddNodes(auxInd, indI))){ 
-                  // if  offspring j is candidiate for which active node gets add get all new candidates
-                  
-                  List auxNewsComb=getNewCandidates(off[j], minI[off[j]]+1, tree, minI, isOffMat);
-                  
-                  if(auxNewsComb.length() == 0){
-                    //Problem size too large (too many possible candidates) 
-                    // to avoid memory issue stop calculations. 
-                    // Change maxSize in getNewCandidates to increase feasible problem size.
-                    return(auxNewsComb);
-                  }
-                  
-                  newsComb[j] = auxNewsComb;
-                  auxInd = auxInd + 1;
-                  auxLengths[j] = auxNewsComb.length();
-                }
-                else{
-                  // if offspring j is not the caditate for which active node gets added take all current valid solutions
-                  List auxComb = combI[j];
-                  List auxNewsComb(auxComb.length()); 
-                  
-                  for(k = 0; k < auxComb.length(); k++){
-                    List auxComblist = auxComb[k];
-                    auxNewsComb[k]=auxComblist[0]; //get active nodes for k-th candidate
-                  }
-                  
-                  auxLengths[j]=auxComb.length();
-                  newsComb[j]=auxNewsComb;
-                }
+              IntegerVector minIVar=clone(minI);
+              minIVar[Anc[i]]=0;
+              
+              List combNew = getNewCandidates(Anc[i], minItest, tree, minIVar, isOffMat,1); //get all possible candiates for new active nodes
+              
+              if(combNew.length() == 0){
+                //Problem size too large (too many possible candidates) 
+                // to avoid memory issue stop calculations. 
+                // Change maxSize in getNewCandidates to increase feasible problem size.
+                return(combNew);
               }
               
-              mat newsI = allComb(auxLengths);
               
-              for(indN = 0; (unsigned) indN < newsI.n_rows; indN++){
-                //check feasibility of all new candidates
+              for(j=0; j<combNew.length(); j++){
+                //check for all new candiates whether multiscale constraint can be fulfilled
                 
-                IntegerVector news(0);
+                IntegerVector auxComb = combNew[j];
+                IntegerMatrix ofItb(auxComb.length(),2); //boundary of non-important offspring area of Anc[i]
+                
                 double maxB = min(lower);
                 double minB = max(upper);
-                LogicalVector rm(lower.length());
-                
-                for(j=0; (unsigned)j < newsI.n_cols; j++){
-                  
-                  List auxcombs = newsComb[j];
-                  IntegerVector auxcomb = auxcombs[newsI(indN,j)-1];
-                  
-                  for(k = 0; k < auxcomb.length(); k++){
-                    news.push_back(auxcomb[k]);
-                  }
-                }
                 
                 
-                for(j=0; j<news.length(); j++){
-                  //for each AN remove bounds which intersect with their influence region
+                for(k=0; k<auxComb.length(); k++){
+                  //intersect bounds of non-important offsping area of Anc[i] (which is not in influence region of potential active node)
+                  IntegerVector auxB = getOffspringTipB(auxComb[k], tree);
                   
-                  IntegerVector auxB = getOffspringTipB(news[j], tree);
+                  ofItb(k,0)=auxB[0];
+                  ofItb(k,1)=auxB[1];
                   
-                  for(li = 1;li <= auxB[1]; li++){
+                  for(li = minoftb; li <= maxoftb; li++){
                     
-                    riS = std::max(auxB[0], li);
-                    riE = n;
-                    
-                    IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
-                    
-                    iRiS = iRi[0];
-                    iRiE = iRi[1];
-                    
-                    
-                    for(int i1 = iRiS; i1 <= iRiE; i1++){
-                      //ri = li - 1 + lengths[i1];
-                      //int ind = bouPos(li, ri, allInt, startLi[li-1]);
-                      
-                      int ind = startLi[li - 1] + i1;
-                      
-                      if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                      rm[ind] = 1;
-                      }
+                    int riMax = maxoftb;
+                    if(li <= auxB[1]){
+                      riMax = std::min(riMax, auxB[0] - 1);
                     }
-                  }
-                }
-                
-                if(minoftb > 1){
-                  //remove bounds left of influence region of AN[j]
-                  
-                  for(li = 1;li <= minoftb - 1;li++){
                     
                     riS = li;
-                    riE = n;
+                    riE = riMax;
                     
                     IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
                     
@@ -642,110 +289,468 @@ List segTree_CC(arma::mat K, arma::vec R,
                     iRiE = iRi[1];
                     
                     
-                    
                     for(int i1 = iRiS; i1 <= iRiE; i1++){
+                      
                       //ri = li - 1 + lengths[i1];
                       //int ind = bouPos(li, ri, allInt, startLi[li-1]);
                       
                       int ind = startLi[li - 1] + i1;
                       
                       if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                      rm[ind]=1;
-                      }
+                      maxB = std::max(maxB, lower[ind]);
+                      minB = std::min(minB, upper[ind]);
                       
-                    }
-                  }
-                }
-                
-                if(maxoftb < n){
-                  //remove bounds right of influence region of AN[j]
-                  
-                  
-                  for(li = 1;li <= n; li++){
-                    
-                    riS = std::max(maxoftb + 1, li);
-                    riE = n;
-                    
-                    IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
-                    
-                    iRiS = iRi[0];
-                    iRiE = iRi[1];
-                    
-                    
-                    for(int i1 = iRiS; i1 <= iRiE; i1++){
-                      //ri = li - 1 + lengths[i1];
-                      //int ind = bouPos(li, ri, allInt, startLi[li-1]);
-                      
-                      int ind = startLi[li - 1] + i1;
-                      
-                      if(ind >= 0){//when no bounds exists for this interval ind = -1
-                      rm[ind] = 1;
                       }
                     }
                   }
                 }
-                
-                minB=vecmin(upper[!rm]);
-                maxB=vecmax(lower[!rm]);
-                
                 
                 if(minB >= maxB){
-                  //candidate is valid solution, add to list of valid solutions
+                  //candidiate gives valid solution, add this to list of all valid solutions
                   
-                  news.sort();
-                  ncomb.push_back(List::create(Named("comb")=news, Named("minB")=minB, Named("maxB")=maxB));
+                  auxComb.sort();
+                  ncomb.push_back(List::create(Named("comb")=auxComb, Named("minB")=minB, Named("maxB")=maxB));
+                  ofItb.sort();
+                  
                   // LogicalVector range(n);
-                  double auxCost = 0;
-                  
-                  // for(j = minoftb-1; j < maxoftb; j++){
-                  //   range[j] = 1;
+                  // for(k = minoftb-1; k < ofItb[0]-1; k++){
+                  //   range[k]=1;
                   // }
                   // 
-                  // for(j = 0; j < news.length(); j++){
-                  //   IntegerVector auxOff = getOffspringTip(news[j],tree);
-                  //   for(k=0; k < auxOff.length(); k++){
-                  //     range[auxOff[k]-1] = 0;
+                  // for(r=0; r<(ofItb.length()-2)/2;r++){
+                  //   for(k = ofItb[2*r+1]; k < ofItb[2*r+2]-1; k++){
+                  //     range[k]=1;
                   //   }
-                  //   auxCost = auxCost + optCost[news[j]];
+                  // }
+                  // 
+                  // for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
+                  //   range[k]=1;
                   // }
                   
                   arma::uvec indices(n);
-                  for(j = minoftb-1; j < maxoftb; j++){
-                    indices.row(j).ones();
+                  for(k = minoftb-1; k < ofItb[0]-1; k++){
+                    indices.row(k).ones();
+                  }
+  
+                  for(r=0; r<(ofItb.length()-2)/2;r++){
+                    for(k = ofItb[2*r+1]; k < ofItb[2*r+2]-1; k++){
+                      indices.row(k).ones();
+                    }
                   }
                   
-                  for(j = 0; j < news.length(); j++){
-                    IntegerVector auxOff = getOffspringTip(news[j],tree);
-                    for(k=0; k < auxOff.length(); k++){
-                      indices.row(auxOff[k]-1).zeros();
-                    }
-                    auxCost = auxCost + optCost[news[j]];
+                  for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
+                    indices.row(k).ones();
                   }
                   
                   // which rows are true to change from
                   // LogicalVector to vector of indices
                   // arma::uvec indices = arma::find(range>0);
-                  auxCost = auxCost + mlCost_CC(mX.rows(indices),
-                                                K.submat(indices, indices),
-                                                R.rows(indices),
-                                                s2, df, fam);
+                  
+                  double auxCost=mlCost_CC(mX.rows(indices),
+                                      K.submat(indices, indices),
+                                      R.rows(indices),
+                                      s2, df, fam);
+                  
+                  for(k=0; k<auxComb.length(); k++){
+                    auxCost = auxCost + optCost[auxComb[k]];
+                  }
                   
                   cost.push_back(auxCost);
+                  
+                }
+              }
+              if(ncomb.length()>0){
+                //Valid solutions found.
+                
+                minI[Anc[i]] = minItest;
+                sortComb(ncomb,cost);
+                comb[Anc[i]]=ncomb;
+                optCost[Anc[i]]=cost[0];
+                
+              }
+            }
+          }
+        }
+        else{
+          //offsprings do have some active nodes
+          //first, check feasibility of all combinations of valid solutions from offsprings
+          
+          List ncomb(0);
+          NumericVector cost(0);
+          
+          IntegerVector auxLengths(combI.length());
+          
+          
+          for(j=0; j<combI.length(); j++){
+            List auxcomb = combI[j];  //valid solutions of offspring j
+            auxLengths[j] = auxcomb.length(); //number of valid solutions of offspring j
+          }
+          
+          arma:: mat newsI = allComb(auxLengths); //possible combinations of valid solutions of individual offsprings
+          
+          for(indN = 0; (unsigned)indN < newsI.n_rows; indN++){
+            IntegerVector news(0);
+            IntegerVector ofItb(0);
+            double maxB = min(lower);
+            double minB = max(upper);
+            
+            
+            for(j = 0; (unsigned)j < newsI.n_cols; j++){
+              List auxcombs = combI[j];
+              List auxcomb = auxcombs[newsI(indN,j)-1];
+              List onlyAuxComb = auxcomb[0]; //current combination of active nodes under consideration
+              
+              for(k=0; k<onlyAuxComb.length(); k++){
+                IntegerVector auxBounds = getOffspringTipB(onlyAuxComb[k], tree);
+                
+                news.push_back(onlyAuxComb[k]);
+                ofItb.push_back(auxBounds[0]);
+                ofItb.push_back(auxBounds[1]);
+              }
+              
+              
+              maxB = std::max(maxB, as<double>(auxcomb[2])); //get multiscale lower bound for ANs of current combination
+              minB = std::min(minB, as<double>(auxcomb[1])); //get multiscale upper bound for ANs of current combination
+            }
+            ofItb.sort();
+            
+            
+            for(j=0; j < off.length()-1; j++){
+              //get indeces of intervals of non-important region
+              IntegerVector subaux1 = ofItb[ofItb <= oftb[2*j+1]];
+              IntegerVector subaux2 = ofItb[ofItb >= oftb[2*j+2]];
+              
+              int liStart;
+              if(subaux1.size() == 0){
+                liStart = oftb[2*j];
+              }else{
+                liStart = std::max(max(subaux1)+1, oftb[2*j]);
+              }
+              
+              int riEnd;
+              if(subaux2.size() == 0){
+                riEnd = oftb[2*j+3];
+              }else{
+                riEnd = std::min(min(subaux2) - 1, oftb[2*j+3]);
+              }
+              
+              for(li = liStart; li <= oftb[2*j+1]; li++){
+                //intersect with bounds on non-important region (not in influence region of ANs)
+                
+                riS = std::max(oftb[2*j+1]+1, li);
+                riE = riEnd;
+                
+                IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
+                
+                iRiS = iRi[0];
+                iRiE = iRi[1];
+                
+                for(int i1 = iRiS; i1 <= iRiE; i1++){
+                  
+                  //ri = li - 1 + lengths[i1];
+                  //int ind = bouPos(li, ri, allInt, startLi[li-1]);
+                  
+                  int ind = startLi[li - 1] + i1;
+                  
+                  if(ind >= 0){ //when no bounds exists for this interval ind = -1
+                  maxB=std::max(maxB, lower[ind]);
+                  minB=std::min(minB, upper[ind]);
+                  }
                 }
               }
             }
             
-            if(ncomb.length() > 0){
-              //Valid solutions found, no need to add more active nodes
+            if(minB >= maxB){
+              //current candidate is valid solution, add to list of valid solutions
               
-              minI[Anc[i]]= minITest;
-              sortComb(ncomb,cost);
-              comb[Anc[i]]=ncomb;
-              optCost[Anc[i]]=cost[0];
+              news.sort();
+              ncomb.push_back(List::create(Named("comb")=news, Named("minB")=minB, Named("maxB")=maxB));
+              // LogicalVector range(n);
+              double auxCost=0;
+              
+              // for(j=minoftb-1; j<maxoftb; j++){
+              //   range[j]=1;
+              // }
+              // 
+              // for(j=0; j<news.length(); j++){
+              //   IntegerVector auxOff = getOffspringTip(news[j],tree);
+              //   for(k=0; k<auxOff.length(); k++){
+              //     range[auxOff[k]-1]=0;
+              //   }
+              //   auxCost = auxCost + optCost[news[j]];
+              // }
+              
+              arma::uvec indices(n);
+              for(j=minoftb-1; j<maxoftb; j++){
+                indices.row(j).ones();
+              }
+              
+              for(j=0; j<news.length(); j++){
+                IntegerVector auxOff = getOffspringTip(news[j],tree);
+                for(k=0; k<auxOff.length(); k++){
+                  // range[auxOff[k]-1]=0;
+                  indices.row(auxOff[k]-1).zeros();
+                }
+                auxCost = auxCost + optCost[news[j]];
+              }
+              
+              
+              // which rows are true to change from
+              // LogicalVector to vector of indices
+              // arma::uvec indices = arma::find(range>0);
+              auxCost = auxCost+mlCost_CC(mX.rows(indices),
+                                          K.submat(indices, indices),
+                                          R.rows(indices),
+                                          s2, df, fam);
+  
+              cost.push_back(auxCost);
+            }
+          }
+          if(ncomb.length() > 0){
+            //Valid solutions were found, no additional active node needs to be added
+            
+            int auxMinI = 0;
+            for(j=0; j<off.length(); j++){
+              auxMinI = auxMinI+minI[off[j]]; 
+            }
+            minI[Anc[i]]=auxMinI;
+            sortComb(ncomb,cost);
+            comb[Anc[i]]=ncomb;
+            optCost[Anc[i]]=cost[0];
+          }
+          else{
+            //No valid solutions were found, additional active node needs to be added
+            
+            //printf("No valid solutions were found, additional active node.\n");
+            
+            int minITest = 0;
+            int addNodes = 0;
+            
+            for(j = 0; j < off.length(); j++){
+              minITest = minITest + minI[off[j]]; 
+            }
+            while(minI[Anc[i]] == NA){
+              
+              addNodes = addNodes + 1;
+              minITest = minITest + addNodes;               //current number of active nodes to be tested
+              
+              umat indAddNodes = mycombn(off.length(), addNodes);   //all combinations at which offspring node active node gets added
+              
+              
+              for(indI = 0; (unsigned)indI < indAddNodes.n_cols; indI++){
+                //check solutions with AN added at indI
+                
+                
+                int auxInd = 0; //number of active nodes added
+                List newsComb(off.length()); //all combinations for different offsprings
+                IntegerVector auxLengths(off.length());
+                
+                for(j = 0; j < off.length(); j++){
+                  
+                  if(((unsigned) auxInd < indAddNodes.n_rows) && (((unsigned) j+1) == indAddNodes(auxInd, indI))){ 
+                    // if  offspring j is candidiate for which active node gets add get all new candidates
+                    
+                    List auxNewsComb=getNewCandidates(off[j], minI[off[j]]+1, tree, minI, isOffMat);
+                    
+                    if(auxNewsComb.length() == 0){
+                      //Problem size too large (too many possible candidates) 
+                      // to avoid memory issue stop calculations. 
+                      // Change maxSize in getNewCandidates to increase feasible problem size.
+                      return(auxNewsComb);
+                    }
+                    
+                    newsComb[j] = auxNewsComb;
+                    auxInd = auxInd + 1;
+                    auxLengths[j] = auxNewsComb.length();
+                  }
+                  else{
+                    // if offspring j is not the caditate for which active node gets added take all current valid solutions
+                    List auxComb = combI[j];
+                    List auxNewsComb(auxComb.length()); 
+                    
+                    for(k = 0; k < auxComb.length(); k++){
+                      List auxComblist = auxComb[k];
+                      auxNewsComb[k]=auxComblist[0]; //get active nodes for k-th candidate
+                    }
+                    
+                    auxLengths[j]=auxComb.length();
+                    newsComb[j]=auxNewsComb;
+                  }
+                }
+                
+                mat newsI = allComb(auxLengths);
+                
+                for(indN = 0; (unsigned) indN < newsI.n_rows; indN++){
+                  //check feasibility of all new candidates
+                  
+                  IntegerVector news(0);
+                  double maxB = min(lower);
+                  double minB = max(upper);
+                  LogicalVector rm(lower.length());
+                  
+                  for(j=0; (unsigned)j < newsI.n_cols; j++){
+                    
+                    List auxcombs = newsComb[j];
+                    IntegerVector auxcomb = auxcombs[newsI(indN,j)-1];
+                    
+                    for(k = 0; k < auxcomb.length(); k++){
+                      news.push_back(auxcomb[k]);
+                    }
+                  }
+                  
+                  
+                  for(j=0; j<news.length(); j++){
+                    //for each AN remove bounds which intersect with their influence region
+                    
+                    IntegerVector auxB = getOffspringTipB(news[j], tree);
+                    
+                    for(li = 1;li <= auxB[1]; li++){
+                      
+                      riS = std::max(auxB[0], li);
+                      riE = n;
+                      
+                      IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
+                      
+                      iRiS = iRi[0];
+                      iRiE = iRi[1];
+                      
+                      
+                      for(int i1 = iRiS; i1 <= iRiE; i1++){
+                        //ri = li - 1 + lengths[i1];
+                        //int ind = bouPos(li, ri, allInt, startLi[li-1]);
+                        
+                        int ind = startLi[li - 1] + i1;
+                        
+                        if(ind >= 0){ //when no bounds exists for this interval ind = -1
+                        rm[ind] = 1;
+                        }
+                      }
+                    }
+                  }
+                  
+                  if(minoftb > 1){
+                    //remove bounds left of influence region of AN[j]
+                    
+                    for(li = 1;li <= minoftb - 1;li++){
+                      
+                      riS = li;
+                      riE = n;
+                      
+                      IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
+                      
+                      iRiS = iRi[0];
+                      iRiE = iRi[1];
+                      
+                      
+                      
+                      for(int i1 = iRiS; i1 <= iRiE; i1++){
+                        //ri = li - 1 + lengths[i1];
+                        //int ind = bouPos(li, ri, allInt, startLi[li-1]);
+                        
+                        int ind = startLi[li - 1] + i1;
+                        
+                        if(ind >= 0){ //when no bounds exists for this interval ind = -1
+                        rm[ind]=1;
+                        }
+                        
+                      }
+                    }
+                  }
+                  
+                  if(maxoftb < n){
+                    //remove bounds right of influence region of AN[j]
+                    
+                    
+                    for(li = 1;li <= n; li++){
+                      
+                      riS = std::max(maxoftb + 1, li);
+                      riE = n;
+                      
+                      IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths);
+                      
+                      iRiS = iRi[0];
+                      iRiE = iRi[1];
+                      
+                      
+                      for(int i1 = iRiS; i1 <= iRiE; i1++){
+                        //ri = li - 1 + lengths[i1];
+                        //int ind = bouPos(li, ri, allInt, startLi[li-1]);
+                        
+                        int ind = startLi[li - 1] + i1;
+                        
+                        if(ind >= 0){//when no bounds exists for this interval ind = -1
+                        rm[ind] = 1;
+                        }
+                      }
+                    }
+                  }
+                  
+                  minB=vecmin(upper[!rm]);
+                  maxB=vecmax(lower[!rm]);
+                  
+                  
+                  if(minB >= maxB){
+                    //candidate is valid solution, add to list of valid solutions
+                    
+                    news.sort();
+                    ncomb.push_back(List::create(Named("comb")=news, Named("minB")=minB, Named("maxB")=maxB));
+                    // LogicalVector range(n);
+                    double auxCost = 0;
+                    
+                    // for(j = minoftb-1; j < maxoftb; j++){
+                    //   range[j] = 1;
+                    // }
+                    // 
+                    // for(j = 0; j < news.length(); j++){
+                    //   IntegerVector auxOff = getOffspringTip(news[j],tree);
+                    //   for(k=0; k < auxOff.length(); k++){
+                    //     range[auxOff[k]-1] = 0;
+                    //   }
+                    //   auxCost = auxCost + optCost[news[j]];
+                    // }
+                    
+                    arma::uvec indices(n);
+                    for(j = minoftb-1; j < maxoftb; j++){
+                      indices.row(j).ones();
+                    }
+                    
+                    for(j = 0; j < news.length(); j++){
+                      IntegerVector auxOff = getOffspringTip(news[j],tree);
+                      for(k=0; k < auxOff.length(); k++){
+                        indices.row(auxOff[k]-1).zeros();
+                      }
+                      auxCost = auxCost + optCost[news[j]];
+                    }
+                    
+                    // which rows are true to change from
+                    // LogicalVector to vector of indices
+                    // arma::uvec indices = arma::find(range>0);
+                    auxCost = auxCost + mlCost_CC(mX.rows(indices),
+                                                  K.submat(indices, indices),
+                                                  R.rows(indices),
+                                                  s2, df, fam);
+                    
+                    cost.push_back(auxCost);
+                  }
+                }
+              }
+              
+              if(ncomb.length() > 0){
+                //Valid solutions found, no need to add more active nodes
+                
+                minI[Anc[i]]= minITest;
+                sortComb(ncomb,cost);
+                comb[Anc[i]]=ncomb;
+                optCost[Anc[i]]=cost[0];
+              }
             }
           }
         }
-      }
+      } else{
+        // Skipping the test for clade size < 20
+        minI[i] = NA;
+        comb[i] = List::create(List::create(Named("comb")=empty, Named("minB")=NA, Named("maxB")=NA));
+        optCost[i] = 0;
       }
     }
     
