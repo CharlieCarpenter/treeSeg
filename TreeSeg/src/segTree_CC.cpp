@@ -135,32 +135,32 @@ List segTree_CC(arma::mat K, arma::vec R,
     for(i=0;i<Anc.length();i++){
       
       //printf("Currently consider AN %d \n", Anc[i]);
-      
-      //compute optimal solutions for root node Anc[i]
-      IntegerVector off=offspring(Anc[i],tree);         //direct offsprings of Anc[i]
-      List combI(off.length());                         //valid solutions for those offsprings
-      IntegerVector minII(off.length());                //minimal active nodes of offsprings
-      List oftI(off.length());                          //offspring tip intervals
-      IntegerVector oftb(2*off.length());               //individual offspring tip bounds
-      
-      for(j=0; j<off.length(); j++){
-        IntegerVector offTip=getOffspringTipB(off[j], tree);
-        combI[j]=comb[off[j]];
-        minII[j]=minI[off[j]];
+      IntegerVector allOff=offspringAll(Anc[i],tree);
+      if(allOff.length() >= 20){
+        //compute optimal solutions for root node Anc[i]
+        IntegerVector off=offspring(Anc[i],tree);         //direct offsprings of Anc[i]
+        List combI(off.length());                         //valid solutions for those offsprings
+        IntegerVector minII(off.length());                //minimal active nodes of offsprings
+        List oftI(off.length());                          //offspring tip intervals
+        IntegerVector oftb(2*off.length());               //individual offspring tip bounds
         
         
-        oftI[j]=offTip;
-        oftb[2*j]=offTip[0];
-        oftb[2*j+1]=offTip[1];
-      }
-      
-      int maxoftb = max(oftb);                          //most right offspring of Anc[i]
-      int minoftb = min(oftb);                          //most left offspring of Anc[i]
-      
-      // indices calculated as (minoftb, maxoftb)
-      // only calculating for indices of size >=20
-      
-      if(maxoftb-minoftb >= 20){
+        for(j=0; j<off.length(); j++){
+          IntegerVector offTip=getOffspringTipB(off[j], tree);
+          combI[j]=comb[off[j]];
+          minII[j]=minI[off[j]];
+          
+          
+          oftI[j]=offTip;
+          oftb[2*j]=offTip[0];
+          oftb[2*j+1]=offTip[1];
+        }
+        
+        int maxoftb = max(oftb);                          //most right offspring of Anc[i]
+        int minoftb = min(oftb);                          //most left offspring of Anc[i]
+        
+        // indices calculated as (minoftb, maxoftb)
+        // only calculating for indices of size >=20
         if(is_true(all(minII==0))){
           //both offsprings have no active nodes
           
