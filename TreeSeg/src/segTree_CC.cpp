@@ -135,8 +135,8 @@ List segTree_CC(arma::mat K, arma::vec R,
     for(i=0;i<Anc.length();i++){
       
       //printf("Currently consider AN %d \n", Anc[i]);
-      IntegerVector allOff=offspringAll(Anc[i],tree);
-      if(allOff.length() >= 20){
+      IntegerVector tips=getOffspringTip(Anc[i],tree);
+      if(tips.length() >= 20){
         //compute optimal solutions for root node Anc[i]
         IntegerVector off=offspring(Anc[i],tree);         //direct offsprings of Anc[i]
         List combI(off.length());                         //valid solutions for those offsprings
