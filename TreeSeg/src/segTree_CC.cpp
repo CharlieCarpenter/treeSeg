@@ -729,18 +729,20 @@ List segTree_CC(arma::mat K, arma::vec R,
             }
           }
         }
-      } else{
-        // Skipping the test for clade size < 20
-        
-        minI[Anc[i]] = 0;
-        
-        double maxB = min(lower);         //initialize maximum of lower bounds
-        double minB = max(upper);         //initialize minimum of upper bounds
-        
-        IntegerVector ncomb(0);
-        comb[Anc[i]] = List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
-        optCost[Anc[i]] = 0;
-      }
+      } 
+      
+      // else{
+      //   // Skipping the test for clade size < 20
+      //   
+      //   minI[Anc[i]] = 0;
+      //   
+      //   double maxB = min(lower);         //initialize maximum of lower bounds
+      //   double minB = max(upper);         //initialize minimum of upper bounds
+      //   
+      //   IntegerVector ncomb(0);
+      //   comb[Anc[i]] = List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
+      //   optCost[Anc[i]] = 0;
+      // }
     }
     
     calcSol = calcSol + Anc.length();         //update number of solved sub-problems
