@@ -310,21 +310,6 @@ List segTree_CC(arma::mat K, arma::vec R,
                   ncomb.push_back(List::create(Named("comb")=auxComb, Named("minB")=minB, Named("maxB")=maxB));
                   ofItb.sort();
                   
-                  // LogicalVector range(n);
-                  // for(k = minoftb-1; k < ofItb[0]-1; k++){
-                  //   range[k]=1;
-                  // }
-                  // 
-                  // for(r=0; r<(ofItb.length()-2)/2;r++){
-                  //   for(k = ofItb[2*r+1]; k < ofItb[2*r+2]-1; k++){
-                  //     range[k]=1;
-                  //   }
-                  // }
-                  // 
-                  // for(k = ofItb[ofItb.length()-1]; k < maxoftb; k++){
-                  //   range[k]=1;
-                  // }
-                  
                   arma::uvec indices(n);
                   for(k = minoftb-1; k < ofItb[0]-1; k++){
                     indices.row(k).ones();
@@ -746,9 +731,14 @@ List segTree_CC(arma::mat K, arma::vec R,
         }
       } else{
         // Skipping the test for clade size < 20
+        
         minI[Anc[i]] = 0;
+        
+        double maxB = min(lower);         //initialize maximum of lower bounds
+        double minB = max(upper);         //initialize minimum of upper bounds
+        
         IntegerVector ncomb(0);
-        comb[Anc[i]] = List::create(List::create(Named("comb")=ncomb, Named("minB")=0, Named("maxB")=0));
+        comb[Anc[i]] = List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
         optCost[Anc[i]] = 0;
       }
     }
