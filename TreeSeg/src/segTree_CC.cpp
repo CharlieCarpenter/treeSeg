@@ -735,6 +735,9 @@ List segTree_CC(arma::mat K, arma::vec R,
         // Skipping the test for clade size < 20
         // Same as finding no active nodes
 
+        double maxB = min(lower);         //initialize maximum of lower bounds
+        double minB = max(upper);         //initialize minimum of upper bounds
+        
         minI[Anc[i]] = 0;
         IntegerVector ncomb(0);
         comb[Anc[i]] = List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
