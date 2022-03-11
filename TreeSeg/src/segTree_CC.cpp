@@ -159,8 +159,6 @@ List segTree_CC(arma::mat K, arma::vec R,
         int maxoftb = max(oftb);                          //most right offspring of Anc[i]
         int minoftb = min(oftb);                          //most left offspring of Anc[i]
         
-        // indices calculated as (minoftb, maxoftb)
-        // only calculating for indices of size >=20
         if(is_true(all(minII==0))){
           //both offsprings have no active nodes
           
