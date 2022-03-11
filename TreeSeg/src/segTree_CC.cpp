@@ -754,7 +754,6 @@ List segTree_CC(arma::mat K, arma::vec R,
                                   s2, df, fam);
       }
     } 
-    }
     
     calcSol = calcSol + Anc.length();         //update number of solved sub-problems
   }
