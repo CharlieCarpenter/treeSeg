@@ -135,30 +135,32 @@ List segTree_CC(arma::mat K, arma::vec R,
     for(i=0;i<Anc.length();i++){
       
       //printf("Currently consider AN %d \n", Anc[i]);
+    
+      //compute optimal solutions for root node Anc[i]
+      IntegerVector off=offspring(Anc[i],tree);         //direct offsprings of Anc[i]
+      List combI(off.length());                         //valid solutions for those offsprings
+      IntegerVector minII(off.length());                //minimal active nodes of offsprings
+      List oftI(off.length());                          //offspring tip intervals
+      IntegerVector oftb(2*off.length());               //individual offspring tip bounds
+      
+      
+      for(j=0; j<off.length(); j++){
+        IntegerVector offTip=getOffspringTipB(off[j], tree);
+        combI[j]=comb[off[j]];
+        minII[j]=minI[off[j]];
+        
+        
+        oftI[j]=offTip;
+        oftb[2*j]=offTip[0];
+        oftb[2*j+1]=offTip[1];
+      }
+      
+      int maxoftb = max(oftb);                          //most right offspring of Anc[i]
+      int minoftb = min(oftb);                          //most left offspring of Anc[i]
+      
       IntegerVector tips=getOffspringTip(Anc[i],tree);
       if(tips.length() >= 20){
-        //compute optimal solutions for root node Anc[i]
-        IntegerVector off=offspring(Anc[i],tree);         //direct offsprings of Anc[i]
-        List combI(off.length());                         //valid solutions for those offsprings
-        IntegerVector minII(off.length());                //minimal active nodes of offsprings
-        List oftI(off.length());                          //offspring tip intervals
-        IntegerVector oftb(2*off.length());               //individual offspring tip bounds
-        
-        
-        for(j=0; j<off.length(); j++){
-          IntegerVector offTip=getOffspringTipB(off[j], tree);
-          combI[j]=comb[off[j]];
-          minII[j]=minI[off[j]];
-          
-          
-          oftI[j]=offTip;
-          oftb[2*j]=offTip[0];
-          oftb[2*j+1]=offTip[1];
-        }
-        
-        int maxoftb = max(oftb);                          //most right offspring of Anc[i]
-        int minoftb = min(oftb);                          //most left offspring of Anc[i]
-        
+      
         if(is_true(all(minII==0))){
           //both offsprings have no active nodes
           
@@ -731,16 +733,24 @@ List segTree_CC(arma::mat K, arma::vec R,
         }
       } else{
         // Skipping the test for clade size < 20
+        // Same as finding no active nodes
 
         minI[Anc[i]] = 0;
-
-        double maxB = min(lower);         //initialize maximum of lower bounds
-        double minB = max(upper);         //initialize minimum of upper bounds
-
         IntegerVector ncomb(0);
         comb[Anc[i]] = List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
         // optCost[Anc[i]] = 0;
+        
+        arma::uvec indices(n);
+        for(j=minoftb-1; j<maxoftb; j++){
+          indices.row(j).ones();
+        }
+        
+        optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
+                                  K.submat(indices, indices),
+                                  R.rows(indices),
+                                  s2, df, fam);
       }
+    } 
     }
     
     calcSol = calcSol + Anc.length();         //update number of solved sub-problems
