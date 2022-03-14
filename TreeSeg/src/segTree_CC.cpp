@@ -159,8 +159,8 @@ List segTree_CC(arma::mat K, arma::vec R,
       int minoftb = min(oftb);                          //most left offspring of Anc[i]
       
       IntegerVector tips=getOffspringTip(Anc[i],tree);
-      if(tips.length() >= 20){
       
+      if(tips.length() >= 20){
         if(is_true(all(minII==0))){
           //both offsprings have no active nodes
           
@@ -197,8 +197,8 @@ List segTree_CC(arma::mat K, arma::vec R,
                   int ind = startLi[li - 1] + i1;
                   
                   if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                  maxB=std::max(maxB, lower[ind]);
-                  minB=std::min(minB, upper[ind]);
+                    maxB=std::max(maxB, lower[ind]);
+                    minB=std::min(minB, upper[ind]);
                   }
                   
                 }
@@ -213,10 +213,6 @@ List segTree_CC(arma::mat K, arma::vec R,
             minI[Anc[i]]=0;
             IntegerVector ncomb(0);
             comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
-            // LogicalVector range(n);
-            // for(j=minoftb-1; j<maxoftb; j++){
-            //   range[j]=1;
-            // }
             
             arma::uvec indices(n);
             for(j=minoftb-1; j<maxoftb; j++){
@@ -297,9 +293,9 @@ List segTree_CC(arma::mat K, arma::vec R,
                       int ind = startLi[li - 1] + i1;
                       
                       if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                      maxB = std::max(maxB, lower[ind]);
-                      minB = std::min(minB, upper[ind]);
-                      
+                        maxB = std::max(maxB, lower[ind]);
+                        minB = std::min(minB, upper[ind]);
+                        
                       }
                     }
                   }
@@ -316,7 +312,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                   for(k = minoftb-1; k < ofItb[0]-1; k++){
                     indices.row(k).ones();
                   }
-  
+                  
                   for(r=0; r<(ofItb.length()-2)/2;r++){
                     for(k = ofItb[2*r+1]; k < ofItb[2*r+2]-1; k++){
                       indices.row(k).ones();
@@ -332,9 +328,9 @@ List segTree_CC(arma::mat K, arma::vec R,
                   // arma::uvec indices = arma::find(range>0);
                   
                   double auxCost=mlCost_CC(mX.rows(indices),
-                                      K.submat(indices, indices),
-                                      R.rows(indices),
-                                      s2, df, fam);
+                                           K.submat(indices, indices),
+                                           R.rows(indices),
+                                           s2, df, fam);
                   
                   for(k=0; k<auxComb.length(); k++){
                     auxCost = auxCost + optCost[auxComb[k]];
@@ -438,8 +434,8 @@ List segTree_CC(arma::mat K, arma::vec R,
                   int ind = startLi[li - 1] + i1;
                   
                   if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                  maxB=std::max(maxB, lower[ind]);
-                  minB=std::min(minB, upper[ind]);
+                    maxB=std::max(maxB, lower[ind]);
+                    minB=std::min(minB, upper[ind]);
                   }
                 }
               }
@@ -487,7 +483,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                                           K.submat(indices, indices),
                                           R.rows(indices),
                                           s2, df, fam);
-  
+              
               cost.push_back(auxCost);
             }
           }
@@ -607,7 +603,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                         int ind = startLi[li - 1] + i1;
                         
                         if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                        rm[ind] = 1;
+                          rm[ind] = 1;
                         }
                       }
                     }
@@ -635,7 +631,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                         int ind = startLi[li - 1] + i1;
                         
                         if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                        rm[ind]=1;
+                          rm[ind]=1;
                         }
                         
                       }
@@ -664,7 +660,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                         int ind = startLi[li - 1] + i1;
                         
                         if(ind >= 0){//when no bounds exists for this interval ind = -1
-                        rm[ind] = 1;
+                          rm[ind] = 1;
                         }
                       }
                     }
@@ -731,10 +727,9 @@ List segTree_CC(arma::mat K, arma::vec R,
             }
           }
         }
-      } else{
-        // Skipping the test for clade size < 20
-        // Same as finding no active nodes
-
+      }
+      else{
+        
         double maxB = min(lower);         //initialize maximum of lower bounds
         double minB = max(upper);         //initialize minimum of upper bounds
         
@@ -778,17 +773,15 @@ List segTree_CC(arma::mat K, arma::vec R,
           
         }
         
-        minI[Anc[i]] = 0;
-        comb[Anc[i]] = List::create(List::create(Named("comb")=empty, Named("minB")=minB, Named("maxB")=maxB));
+        minI[Anc[i]]=0;
+        IntegerVector ncomb(0);
+        comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
         
         arma::uvec indices(n);
         for(j=minoftb-1; j<maxoftb; j++){
           indices.row(j).ones();
         }
         
-        // which rows are true to change from
-        // LogicalVector to vector of indices
-        // arma::uvec indices = arma::find(range>0);
         optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
                                   K.submat(indices, indices),
                                   R.rows(indices),
