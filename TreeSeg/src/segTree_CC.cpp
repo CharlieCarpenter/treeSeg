@@ -782,7 +782,7 @@ List segTree_CC(arma::mat K, arma::vec R,
         //   indices.row(j).ones();
         // }
         
-        optCost[Anc[i]]=0
+        optCost[Anc[i]]=0;
           
           // mlCost_CC(mX.rows(indices),
           //           K.submat(indices, indices),
