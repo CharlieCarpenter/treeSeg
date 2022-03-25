@@ -728,67 +728,65 @@ List segTree_CC(arma::mat K, arma::vec R,
           }
         }
       }
-      else{
-        
-        double maxB = min(lower);         //initialize maximum of lower bounds
-        double minB = max(upper);         //initialize minimum of upper bounds
-        
-        for(j=0; j < off.length(); j++){
-          List auxcomb=combI[j];
-          List onlyauxcomb=auxcomb[0];
-          double maxaux=onlyauxcomb["maxB"];
-          double minaux=onlyauxcomb["minB"];
-          maxB=std::max(maxB, maxaux);
-          minB=std::min(minB, minaux);
-          
-          if(j < off.length()-1){
-            //intersect with overlapping bounds from two offsprings
-            
-            for(li = oftb[2*j]; li <= oftb[2*j+1]; li++){
-              
-              riS = std::max(oftb[2*j+2], li);        //start value for right bound
-              riE = maxoftb;                          //end value for right bound
-              
-              IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths); //indeces in lengths vector for right and left bound
-              
-              iRiS = iRi[0];
-              iRiE = iRi[1];
-              
-              for(int i1 = iRiS; i1 <= iRiE; i1++){
-                //only loop over bounds of length in lengths
-                
-                //ri = li - 1 + lengths[i1];
-                //int ind = bouPos(li, ri, allInt, startLi[li-1]);
-                
-                int ind = startLi[li - 1] + i1;
-                
-                if(ind >= 0){ //when no bounds exists for this interval ind = -1
-                  maxB=std::max(maxB, lower[ind]);
-                  minB=std::min(minB, upper[ind]);
-                }
-                
-              }
-            }
-          }
-          
-        }
-        
-        minI[Anc[i]]=0;
-        IntegerVector ncomb(0);
-        comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
-        
-        // arma::uvec indices(n);
-        // for(j=minoftb-1; j<maxoftb; j++){
-        //   indices.row(j).ones();
-        // }
-        
-        optCost[Anc[i]]=0;
-          
-          // mlCost_CC(mX.rows(indices),
-          //           K.submat(indices, indices),
-          //           R.rows(indices),
-          //           s2, df, fam);
-      }
+      // else{
+      //   
+      //   double maxB = min(lower);         //initialize maximum of lower bounds
+      //   double minB = max(upper);         //initialize minimum of upper bounds
+      //   
+      //   for(j=0; j < off.length(); j++){
+      //     List auxcomb=combI[j];
+      //     List onlyauxcomb=auxcomb[0];
+      //     double maxaux=onlyauxcomb["maxB"];
+      //     double minaux=onlyauxcomb["minB"];
+      //     maxB=std::max(maxB, maxaux);
+      //     minB=std::min(minB, minaux);
+      //     
+      //     if(j < off.length()-1){
+      //       //intersect with overlapping bounds from two offsprings
+      //       
+      //       for(li = oftb[2*j]; li <= oftb[2*j+1]; li++){
+      //         
+      //         riS = std::max(oftb[2*j+2], li);        //start value for right bound
+      //         riE = maxoftb;                          //end value for right bound
+      //         
+      //         IntegerVector iRi = getiRi(riS, riE, li, allInt, lengths); //indeces in lengths vector for right and left bound
+      //         
+      //         iRiS = iRi[0];
+      //         iRiE = iRi[1];
+      //         
+      //         for(int i1 = iRiS; i1 <= iRiE; i1++){
+      //           //only loop over bounds of length in lengths
+      //           
+      //           //ri = li - 1 + lengths[i1];
+      //           //int ind = bouPos(li, ri, allInt, startLi[li-1]);
+      //           
+      //           int ind = startLi[li - 1] + i1;
+      //           
+      //           if(ind >= 0){ //when no bounds exists for this interval ind = -1
+      //             maxB=std::max(maxB, lower[ind]);
+      //             minB=std::min(minB, upper[ind]);
+      //           }
+      //           
+      //         }
+      //       }
+      //     }
+      //     
+      //   }
+      //   
+      //   minI[Anc[i]]=0;
+      //   IntegerVector ncomb(0);
+      //   comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
+      //   
+      //   arma::uvec indices(n);
+      //   for(j=minoftb-1; j<maxoftb; j++){
+      //     indices.row(j).ones();
+      //   }
+      //   
+      //   optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
+      //                             K.submat(indices, indices),
+      //                             R.rows(indices),
+      //                             s2, df, fam);
+      // }
     } 
     
     calcSol = calcSol + Anc.length();         //update number of solved sub-problems
