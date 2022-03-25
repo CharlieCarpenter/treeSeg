@@ -158,7 +158,7 @@ List segTree_CC(arma::mat K, arma::vec R,
       int maxoftb = max(oftb);                          //most right offspring of Anc[i]
       int minoftb = min(oftb);                          //most left offspring of Anc[i]
       
-      IntegerVector tips=getOffspringTip(Anc[i],tree);
+      IntegerVector tips = getOffspringTip(Anc[i],tree);
       
       if(tips.length() >= 20){
         if(is_true(all(minII==0))){
@@ -777,15 +777,17 @@ List segTree_CC(arma::mat K, arma::vec R,
         IntegerVector ncomb(0);
         comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
         
-        arma::uvec indices(n);
-        for(j=minoftb-1; j<maxoftb; j++){
-          indices.row(j).ones();
-        }
+        // arma::uvec indices(n);
+        // for(j=minoftb-1; j<maxoftb; j++){
+        //   indices.row(j).ones();
+        // }
         
-        optCost[Anc[i]]=mlCost_CC(mX.rows(indices),
-                                  K.submat(indices, indices),
-                                  R.rows(indices),
-                                  s2, df, fam);
+        optCost[Anc[i]]=0
+          
+          // mlCost_CC(mX.rows(indices),
+          //           K.submat(indices, indices),
+          //           R.rows(indices),
+          //           s2, df, fam);
       }
     } 
     
