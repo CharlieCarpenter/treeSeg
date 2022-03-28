@@ -792,11 +792,11 @@ List segTree_CC(arma::mat K, arma::vec R,
     calcSol = calcSol + Anc.length();         //update number of solved sub-problems
   }
   
-  IntegerVector minI = na_omit(minI);
-  List comb = na_omit(comb);
-  NumericVector optCost = na_omit(optCost);
+  IntegerVector na_minI = na_omit(minI);
+  List na_comb = na_omit(comb);
+  NumericVector na_optCost = na_omit(optCost);
   
-  return List::create(Named("minI") = minI,Named("comb") = comb, Named("optCost") = optCost, Named("root") = tree["root"]);
+  return List::create(Named("minI") = na_minI,Named("comb") = na_comb, Named("optCost") = na_optCost, Named("root") = tree["root"]);
 }
 
 
