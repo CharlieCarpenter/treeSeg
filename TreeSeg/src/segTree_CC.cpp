@@ -160,7 +160,7 @@ List segTree_CC(arma::mat K, arma::vec R,
       
       IntegerVector tips = getOffspringTip(Anc[i],tree);
       
-      // if(tips.length() >= 20){
+      if(tips.length() >= 20){
         if(is_true(all(minII==0))){
           //both offsprings have no active nodes
           
@@ -727,7 +727,7 @@ List segTree_CC(arma::mat K, arma::vec R,
             }
           }
         }
-      // }
+      }
       // else{
       // 
       //   double maxB = min(lower);         //initialize maximum of lower bounds
@@ -791,6 +791,10 @@ List segTree_CC(arma::mat K, arma::vec R,
     
     calcSol = calcSol + Anc.length();         //update number of solved sub-problems
   }
+  
+  IntegerVector minI = na_omit(minI);
+  List comb = na_omit(comb);
+  NumericVector optCost = na_omit(optCost);
   
   return List::create(Named("minI") = minI,Named("comb") = comb, Named("optCost") = optCost, Named("root") = tree["root"]);
 }
