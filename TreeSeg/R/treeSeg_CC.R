@@ -170,7 +170,7 @@ treeSeg_CC<- function(formula.H0, data, K,
   
   if(lengths == "all"){
     lengths <- 1:length(y)
-  }else{ #if(lengths == 'dyadic'){
+  }else if(lengths == 'dyadic'){
     #dyadic lengths
     lengths <- c()
     i <- 0
@@ -178,22 +178,9 @@ treeSeg_CC<- function(formula.H0, data, K,
       lengths <- c(lengths, 2^i)
       i <- i + 1
     }
+  } else if(lengths == "kernel"){
+    lengths <- 20:length(y)
   }
-  
-  # else{
-  #   ## Only including clades with >= 20 subjects
-  #   ## lengths = "kernel"
-  #   
-  #   tr <- stats::as.hclust(tree) 
-  #   hh <- seq(from=min(tr$height), to=max(tr$height),
-  #             length.out=maxGrp)
-  #   ct <- cutree(tr, h = hh)
-  #   act <- apply(ct, 2, function(x) any(table(x)<20))
-  #   ct20 <- table(ct[,sum(act)+1])
-  #   
-  #   ## So segTree doesn't have to be updated we do 2^l
-  #   lengths <- 2^seq.int(0,length(ct20))
-  # }
   
   #run treeSeg algorithm
   if(missing(q)){
