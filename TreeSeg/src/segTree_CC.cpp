@@ -729,7 +729,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     calcSol = calcSol + Anc.length();         //update number of solved sub-problems
   }
   
-  return List::create(Named("minI") = na_minI,Named("comb") = na_comb, Named("optCost") = na_optCost, Named("root") = tree["root"]);
+  return List::create(Named("minI") = minI,Named("comb") = comb, Named("optCost") = optCost, Named("root") = tree["root"]);
 }
 
 
