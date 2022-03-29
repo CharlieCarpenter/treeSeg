@@ -55,7 +55,7 @@
 
 treeSeg_CC<- function(formula.H0, data, K,
                       tree, q, alpha, fam, 
-                      tipOrder, lengths = c("all", "dyadic"),
+                      tipOrder, lengths = c("all", "dyadic", "kernel"),
                       checkOrder = TRUE,
                       maxGrp = 100){
   
@@ -163,8 +163,8 @@ treeSeg_CC<- function(formula.H0, data, K,
     }
   }
   
-  if(!is.element(lengths, c("all", "dyadic"))){
-    warning("lengths can only be all or dyadic.")
+  if(!is.element(lengths, c("all", "dyadic", "kernel"))){
+    warning("lengths can only be all, dyadic, or kernel.")
     lengths <- "dyadic"
   }
   
