@@ -13,7 +13,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   int n = R.n_rows;
   
-  if(n == lengths.length() | (int) n-20 == lengths.length() ){
+  if(n == lengths.length() | (int) n-19 == lengths.length() ){
     // interval system with all lengths
     allInt = 1;
     for(int li = 1; li <= n; li++){
