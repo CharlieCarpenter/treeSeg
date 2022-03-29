@@ -16,6 +16,8 @@ List segTree_CC(arma::mat K, arma::vec R,
   if(n == lengths.length() | (int) n-19 == lengths.length() ){
     // interval system with all lengths
     allInt = 1;
+    printf("all lengths >= 20. allInt is %d", allInt);
+    
     for(int li = 1; li <= n; li++){
       startLi.push_back( (li-1)*n - ((li-1)*(li-2))/2 );
     }
@@ -23,6 +25,8 @@ List segTree_CC(arma::mat K, arma::vec R,
   else{
     // interval system with dyadic lengths
     allInt = 0;
+    allInt = 1;
+    printf("Wrong. allInt is %d", allInt);
     for(int li = 1; li <= n; li++){
       int listart = li - 1;
       for(int i = 0; i < li - 1; i++){
