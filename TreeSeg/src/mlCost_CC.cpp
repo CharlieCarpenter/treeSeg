@@ -9,7 +9,7 @@ double mlCost_CC(arma::mat X, arma::mat K, arma::vec R,
   // Projection Matrix
   arma::mat I = eye(X.n_rows, X.n_rows);
   arma::mat XtX = X.t() * X;
-  arma::mat P0 = I - X * inv_sympd(XtX) * X.t();
+  arma::mat P0 = I - X * XtX.i() * X.t();
   
   double Q = 0;
   // if(fam == 0){
