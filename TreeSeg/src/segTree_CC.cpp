@@ -250,7 +250,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                 // to avoid memory issue stop calculations. 
                 // Change maxSize in getNewCandidates to increase feasible problem size.
                 int ll = 252;
-                prinft("Line %d", ll);
+                printf("Line %d", ll);
                 return(combNew);
               }
               
@@ -541,7 +541,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                       // to avoid memory issue stop calculations. 
                       // Change maxSize in getNewCandidates to increase feasible problem size.
                       int ll = 542;
-                      prinft("Line %d", ll);
+                      printf("Line %d", ll);
                       return(auxNewsComb);
                     }
                     
