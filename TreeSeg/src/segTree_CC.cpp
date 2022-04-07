@@ -33,7 +33,8 @@ List segTree_CC(arma::mat K, arma::vec R,
     }
   }
   
-  printf(startLi)
+  printf(lengths.length());
+  printf(startLi);
   
   // generate multiscale bounds from stepR package
   List bou = boundsCall_CC(R, lengths, alpha, q, fam);
