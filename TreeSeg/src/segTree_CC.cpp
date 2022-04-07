@@ -13,7 +13,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   int n = R.n_rows;
   
-  if(n == lengths.length() | (int) n-19 == lengths.length() ){
+  if(n == lengths.length() | (n-19) == lengths.length() ){
     // interval system with all lengths
     allInt = 1;
     
@@ -94,7 +94,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   int calcSol=n;                                        //calculated solutions
   
   while(calcSol<Nn){
-    //printf("solution computed for %d out of %d inner nodes. \n", calcSol, Nn);
+    printf("solution computed for %d out of %d inner nodes. \n", calcSol, Nn);
     
     IntegerVector aanc(anc.length());       //new ancestors
     IntegerVector aancMiss(Nn+1);           //aux vector to check if all the off of a node appear in a level
