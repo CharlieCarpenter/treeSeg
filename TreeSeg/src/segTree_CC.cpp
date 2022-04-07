@@ -249,7 +249,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                 //Problem size too large (too many possible candidates) 
                 // to avoid memory issue stop calculations. 
                 // Change maxSize in getNewCandidates to increase feasible problem size.
-                Rf_PrintValue("252");
+                print("252");
                 return(combNew);
               }
               
@@ -539,7 +539,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                       //Problem size too large (too many possible candidates) 
                       // to avoid memory issue stop calculations. 
                       // Change maxSize in getNewCandidates to increase feasible problem size.
-                      Rf_PrintValue("542");
+                      print("542");
                       return(auxNewsComb);
                     }
                     
