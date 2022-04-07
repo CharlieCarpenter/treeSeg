@@ -33,7 +33,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     }
   }
   
-  printf("lengths.length() = %d", lengths.length());
+  printf("lengths.length() = %td", lengths.length());
   // printf("startLi = %d", startLi);
   
   // generate multiscale bounds from stepR package
@@ -249,7 +249,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                 //Problem size too large (too many possible candidates) 
                 // to avoid memory issue stop calculations. 
                 // Change maxSize in getNewCandidates to increase feasible problem size.
-                print("252");
+                prinft("Line %d", 252);
                 return(combNew);
               }
               
@@ -539,7 +539,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                       //Problem size too large (too many possible candidates) 
                       // to avoid memory issue stop calculations. 
                       // Change maxSize in getNewCandidates to increase feasible problem size.
-                      print("542");
+                      prinft("Line %d", 542);
                       return(auxNewsComb);
                     }
                     
