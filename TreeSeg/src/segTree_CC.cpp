@@ -21,7 +21,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     }
   } else if((n-19) == lengths.length()){
     // interval system with all lengths >=20
-    allInt = 0;
+    allInt = 1;
     
     printf("Right Spot. %i\n", allInt);
     for(int li = 19; li <= n; li++){
