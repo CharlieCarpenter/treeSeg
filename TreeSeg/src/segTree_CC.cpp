@@ -78,6 +78,9 @@ List segTree_CC(arma::mat K, arma::vec R,
     isOffMat(i+1,i+1)=1;
   }
   
+  int ll = 81;
+  printf("Line %i. \n", ll);
+  
   for(i=0; i<ancM.ncol(); i++){
     for(j=0; j<ancM.nrow()-1; j++){
       for(k=j+1; k<ancM.nrow(); k++){
@@ -95,6 +98,9 @@ List segTree_CC(arma::mat K, arma::vec R,
     comb[i]= List::create(List::create(Named("comb")=empty, Named("minB")=upper[ind], Named("maxB")=lower[ind]));
   }
   
+  int ll = 101;
+  printf("Line %i. \n", ll);
+  
   //Initialize ancestor vector
   IntegerVector anc(n);
   for(i=0;i<n;i++){
@@ -103,7 +109,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   int calcSol=n;                                        //calculated solutions
   
-  int ll = 102;
+  int ll = 106;
   printf("Line %i. \n", ll);
   
   while(calcSol<Nn){
@@ -115,7 +121,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     LogicalVector ancRemove(anc.length());  //remove the repeated nodes in anc
     IntegerVector Anc(0);                   //nodes for which optimal solution is computed next
     
-    int ll = 114;
+    int ll = 118;
     printf("Line %i. \n", ll);
     
     //calculate new ancestors (uniquely) + merge subtrees
