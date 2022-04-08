@@ -20,6 +20,11 @@ List segTree_CC(arma::mat K, arma::vec R,
     for(int li = 1; li <= n; li++){
       startLi.push_back( (li-1)*n - ((li-1)*(li-2))/2 );
     }
+    
+    for(int i=0; i < startLi.length(); i++){
+      printf("startLi[%i] is %i \n", i, startLi[i]);
+    }
+    
   }
   else{
     // interval system with dyadic lengths
@@ -105,9 +110,6 @@ List segTree_CC(arma::mat K, arma::vec R,
     LogicalVector ancRemove(anc.length());  //remove the repeated nodes in anc
     IntegerVector Anc(0);                   //nodes for which optimal solution is computed next
     
-    int ll = 108;
-    printf("Line = %d \n", ll);
-    
     //calculate new ancestors (uniquely) + merge subtrees
     for(i=0;i<anc.length();i++){
       int auxAnc = ancestor(anc[i],tree);
@@ -168,9 +170,6 @@ List segTree_CC(arma::mat K, arma::vec R,
       if(is_true(all(minII==0))){
           //both offsprings have no active nodes
           
-          int ll = 171;
-        printf("Line = %d \n", ll);
-          
           double maxB = min(lower);         //initialize maximum of lower bounds
           double minB = max(upper);         //initialize minimum of upper bounds
           
@@ -217,9 +216,6 @@ List segTree_CC(arma::mat K, arma::vec R,
           if(minB>=maxB){
             //multiscale constraint satisfied, no active node needed
             
-            int ll = 220;
-            printf("Line = %d \n", ll);
-            
             minI[Anc[i]]=0;
             IntegerVector ncomb(0);
             comb[Anc[i]]=List::create(List::create(Named("comb")=ncomb, Named("minB")=minB, Named("maxB")=maxB));
@@ -240,9 +236,6 @@ List segTree_CC(arma::mat K, arma::vec R,
           else{
             //multscale constaint not satisfied, need to add active node(s) (at most one active node for binary trees)
             
-            int ll = 243;
-            printf("Line = %d \n", ll);
-            
             int minItest=0;
             
             while(minI[Anc[i]] == NA){
@@ -261,8 +254,7 @@ List segTree_CC(arma::mat K, arma::vec R,
                 //Problem size too large (too many possible candidates) 
                 // to avoid memory issue stop calculations. 
                 // Change maxSize in getNewCandidates to increase feasible problem size.
-                int ll = 252;
-                printf("Line %d", ll);
+                
                 return(combNew);
               }
               
@@ -376,9 +368,6 @@ List segTree_CC(arma::mat K, arma::vec R,
           
           IntegerVector auxLengths(combI.length());
           
-          int ll = 379;
-          printf("Line = %d \n", ll);
-          
           for(j=0; j<combI.length(); j++){
             List auxcomb = combI[j];  //valid solutions of offspring j
             auxLengths[j] = auxcomb.length(); //number of valid solutions of offspring j
@@ -391,9 +380,6 @@ List segTree_CC(arma::mat K, arma::vec R,
             IntegerVector ofItb(0);
             double maxB = min(lower);
             double minB = max(upper);
-            
-            int ll = 395;
-            printf("Line = %d \n", ll);
             
             for(j = 0; (unsigned)j < newsI.n_cols; j++){
               List auxcombs = combI[j];
@@ -509,9 +495,6 @@ List segTree_CC(arma::mat K, arma::vec R,
           if(ncomb.length() > 0){
             //Valid solutions were found, no additional active node needs to be added
             
-            int ll = 510;
-            printf("Line = %d \n", ll);
-            
             int auxMinI = 0;
             for(j=0; j<off.length(); j++){
               auxMinI = auxMinI+minI[off[j]]; 
@@ -525,9 +508,6 @@ List segTree_CC(arma::mat K, arma::vec R,
             //No valid solutions were found, additional active node needs to be added
             
             //printf("No valid solutions were found, additional active node.\n");
-            
-            int ll = 529;
-            printf("Line = %d \n", ll);
             
             int minITest = 0;
             int addNodes = 0;
@@ -546,9 +526,6 @@ List segTree_CC(arma::mat K, arma::vec R,
               for(indI = 0; (unsigned)indI < indAddNodes.n_cols; indI++){
                 //check solutions with AN added at indI
                 
-                int ll = 549;
-                printf("Line = %d \n", ll);
-                
                 int auxInd = 0; //number of active nodes added
                 List newsComb(off.length()); //all combinations for different offsprings
                 IntegerVector auxLengths(off.length());
@@ -564,8 +541,6 @@ List segTree_CC(arma::mat K, arma::vec R,
                       //Problem size too large (too many possible candidates) 
                       // to avoid memory issue stop calculations. 
                       // Change maxSize in getNewCandidates to increase feasible problem size.
-                      int ll = 542;
-                      printf("Line %d", ll);
                       return(auxNewsComb);
                     }
                     
