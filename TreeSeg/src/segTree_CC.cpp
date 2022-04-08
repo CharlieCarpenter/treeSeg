@@ -17,8 +17,8 @@ List segTree_CC(arma::mat K, arma::vec R,
     // interval system with all lengths
     allInt = 1;
     printf("Here, allInt is %d. \n", 1);
-    for(int li = 1; li <= n; li++){
-      startLi.push_back( (li-1)*n - ((li-1)*(li-2))/2 );
+    for(int li = 1; li <= lengths.length(); li++){
+      startLi.push_back( (li-1)*lengths.length() - ((li-1)*(li-2))/2 );
     }
     
     for(int i=0; i < startLi.length(); i++){
