@@ -16,13 +16,8 @@ List segTree_CC(arma::mat K, arma::vec R,
   if(n == lengths.length() | (n-19) == lengths.length() ){
     // interval system with all lengths
     allInt = 1;
-    printf("Here, allInt is %d. \n", 1);
     for(int li = 1; li <= lengths.length(); li++){
       startLi.push_back( (li-1)*lengths.length() - ((li-1)*(li-2))/2 );
-    }
-    
-    for(int i=0; i < startLi.length(); i++){
-      printf("startLi[%i] is %i \n", i, startLi[i]);
     }
     
   }
@@ -37,9 +32,6 @@ List segTree_CC(arma::mat K, arma::vec R,
       startLi.push_back(listart);
     }
   }
-  
-  printf("lengths.length() = %td. \n", lengths.length());
-  // printf("startLi = %d", startLi);
   
   // generate multiscale bounds from stepR package
   List bou = boundsCall_CC(R, lengths, alpha, q, fam);
@@ -102,7 +94,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   int calcSol=n;                                        //calculated solutions
   
   while(calcSol<Nn){
-    printf("solution computed for %d out of %d inner nodes. \n", calcSol, Nn);
+    // printf("solution computed for %d out of %d inner nodes. \n", calcSol, Nn);
     
     IntegerVector aanc(anc.length());       //new ancestors
     IntegerVector aancMiss(Nn+1);           //aux vector to check if all the off of a node appear in a level
@@ -143,7 +135,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     
     for(i=0;i<Anc.length();i++){
       
-      printf("Currently consider AN %d \n", Anc[i]);
+      // printf("Currently consider AN %d \n", Anc[i]);
     
       //compute optimal solutions for root node Anc[i]
       IntegerVector off=offspring(Anc[i],tree);         //direct offsprings of Anc[i]
