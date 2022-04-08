@@ -21,7 +21,9 @@ List segTree_CC(arma::mat K, arma::vec R,
     }
   } else if((n-19) == lengths.length()){
     // interval system with all lengths >=20
-    allInt = 1;
+    allInt = 0;
+    
+    print("Right Spot");
     for(int li = 1; li <= lengths.length(); li++){
       startLi.push_back( (li-1)*lengths.length() - ((li-1)*(li-2))/2 );
     }
