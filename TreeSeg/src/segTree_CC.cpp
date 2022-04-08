@@ -25,7 +25,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     
     printf("Right Spot. %i\n", allInt);
     for(int li = 19; li <= n; li++){
-      startLi.push_back( (li-1)*lengths.length() - ((li-1)*(li-2))/2 );
+      startLi.push_back( (li-1)*n - ((li-1)*(li-2))/2 );
     }
   } else{
     // interval system with dyadic lengths
