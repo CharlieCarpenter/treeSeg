@@ -38,6 +38,7 @@ List boundsCall_CC(const arma::vec x, const Rcpp::NumericVector& lengths, double
     }else{
       
       int zzz=1;
+      int zz = 2:
       printf("In boundsCall_CC %i", zzz);
       
       if(q == NA){
@@ -45,6 +46,9 @@ List boundsCall_CC(const arma::vec x, const Rcpp::NumericVector& lengths, double
                           Rcpp::_["alpha"]  = alpha, 
                           Rcpp::_["lengths"]  = lengths, 
                           Rcpp::_["penalty"] = "sqrt"); // example of additional param
+       
+        printf("In boundsCall_CC %i", zz);
+        
       }
       else{
         bounds = bounds_r(Rcpp::_["y"] = x,
