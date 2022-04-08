@@ -99,6 +99,9 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   int calcSol=n;                                        //calculated solutions
   
+  int ll = 102;
+  printf("Line %i. \n", ll)
+  
   while(calcSol<Nn){
     // printf("solution computed for %d out of %d inner nodes. \n", calcSol, Nn);
     
@@ -107,6 +110,9 @@ List segTree_CC(arma::mat K, arma::vec R,
     LogicalVector aancFlags(Nn+1);          //aux logical vector
     LogicalVector ancRemove(anc.length());  //remove the repeated nodes in anc
     IntegerVector Anc(0);                   //nodes for which optimal solution is computed next
+    
+    int ll = 114;
+    printf("Line %i. \n", ll)
     
     //calculate new ancestors (uniquely) + merge subtrees
     for(i=0;i<anc.length();i++){
