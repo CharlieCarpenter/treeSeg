@@ -40,7 +40,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   }
   
   for(int i=0; i <= startLi.length(); i++){
-    printf("startLi[%i] = %i", i, startLi[i])
+    printf("startLi[%i] = %i", i, startLi[i]);
   }
   
   // generate multiscale bounds from stepR package
@@ -98,8 +98,8 @@ List segTree_CC(arma::mat K, arma::vec R,
     comb[i]= List::create(List::create(Named("comb")=empty, Named("minB")=upper[ind], Named("maxB")=lower[ind]));
   }
   
-  int ll = 101;
-  printf("Line %i. \n", ll);
+  int lll = 101;
+  printf("Line %i. \n", lll);
   
   //Initialize ancestor vector
   IntegerVector anc(n);
@@ -109,8 +109,8 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   int calcSol=n;                                        //calculated solutions
   
-  int ll = 106;
-  printf("Line %i. \n", ll);
+  int llll = 106;
+  printf("Line %i. \n", llll);
   
   while(calcSol<Nn){
     // printf("solution computed for %d out of %d inner nodes. \n", calcSol, Nn);
@@ -121,8 +121,8 @@ List segTree_CC(arma::mat K, arma::vec R,
     LogicalVector ancRemove(anc.length());  //remove the repeated nodes in anc
     IntegerVector Anc(0);                   //nodes for which optimal solution is computed next
     
-    int ll = 118;
-    printf("Line %i. \n", ll);
+    int lllll = 118;
+    printf("Line %i. \n", lllll);
     
     //calculate new ancestors (uniquely) + merge subtrees
     for(i=0;i<anc.length();i++){
