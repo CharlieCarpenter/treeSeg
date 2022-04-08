@@ -24,7 +24,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     allInt = 0;
     
     printf("Right Spot. %i\n", allInt);
-    for(int li = 1; li <= lengths.length(); li++){
+    for(int li = 19; li <= n; li++){
       startLi.push_back( (li-1)*lengths.length() - ((li-1)*(li-2))/2 );
     }
   } else{
@@ -40,7 +40,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   }
   
   for(int i=0; i <= startLi.length(); i++){
-    printf("startLi[%i] = %i", i, startLi[i]);
+    printf("startLi[%i] = %i \n", i, startLi[i]);
   }
   
   // generate multiscale bounds from stepR package
