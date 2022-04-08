@@ -16,7 +16,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   if(n == lengths.length() | (n-19) == lengths.length() ){
     // interval system with all lengths
     allInt = 1;
-    
+    printf("Here, allInt is %d \n.", 1);
     for(int li = 1; li <= n; li++){
       startLi.push_back( (li-1)*n - ((li-1)*(li-2))/2 );
     }
@@ -33,7 +33,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     }
   }
   
-  printf("lengths.length() = %td", lengths.length());
+  printf("lengths.length() = %td \n.", lengths.length());
   // printf("startLi = %d", startLi);
   
   // generate multiscale bounds from stepR package
