@@ -181,6 +181,7 @@ treeSeg_CC<- function(formula.H0, data, K,
     print(lengths)
   } else if(lengths == "kernel"){
     lengths <- 20:length(y)
+    print(lengths)
   }
   
   #run treeSeg algorithm
