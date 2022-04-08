@@ -37,6 +37,9 @@ List boundsCall_CC(const arma::vec x, const Rcpp::NumericVector& lengths, double
       
     }else{
       
+      int zzz=1;
+      printf("In boundsCall_CC %i", zzz);
+      
       if(q == NA){
         bounds = bounds_r(Rcpp::_["y"] = x,
                           Rcpp::_["alpha"]  = alpha, 
