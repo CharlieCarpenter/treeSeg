@@ -13,15 +13,19 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   int n = R.n_rows;
   
-  if(n == lengths.length() | (n-19) == lengths.length() ){
+  if(n == lengths.length() ){
     // interval system with all lengths
+    allInt = 1;
+    for(int li = 1; li <= n; li++){
+      startLi.push_back( (li-1)*n - ((li-1)*(li-2))/2 );
+    }
+  } else if((n-19) == lengths.length()){
+    // interval system with all lengths >=20
     allInt = 1;
     for(int li = 1; li <= lengths.length(); li++){
       startLi.push_back( (li-1)*lengths.length() - ((li-1)*(li-2))/2 );
     }
-    
-  }
-  else{
+  } else{
     // interval system with dyadic lengths
     allInt = 0;
     for(int li = 1; li <= n; li++){
@@ -737,44 +741,44 @@ List segTree_CC(arma::mat K, arma::vec R,
 
 
 
-// IntegerVector getiRi(int riS, int riE, int li, int allInt, const NumericVector& lengths){
-//   //input: start and end point of right index ri, riS and riE; left index li; interval system allInt with length lengths
-//   //output: respective indeces of riS and riE in lengths + li -1
-//   
-//   int iRiS, iRiE;
-//   
-//   if(allInt == 1){
-//     iRiS = riS - li;
-//     iRiE = riE - li;
-//   }
-//   else{
-//     iRiS = lengths.length();
-//     iRiE = -1;
-//     for(int i1 = 0; i1 < lengths.length(); i1++){
-//       if(i1 == 0){
-//         if(li - 1 + lengths[i1] >= riS){
-//           iRiS = i1;
-//         }
-//       }
-//       else{
-//         if(li - 1 + lengths[i1 - 1] < riS && li - 1 + lengths[i1] >= riS){
-//           iRiS = i1;
-//         }
-//       }
-//       if(i1 == lengths.length() - 1){
-//         if(li - 1 + lengths[i1] <= riE){
-//           iRiE = i1;
-//         }
-//       }
-//       else{
-//         if(li - 1 + lengths[i1] <= riE && li - 1 + lengths[i1 + 1] > riE){
-//           iRiE = i1;
-//         }
-//       }
-//     }
-//   }
-//   return IntegerVector::create(iRiS, iRiE);
-// }
+IntegerVector getiRi(int riS, int riE, int li, int allInt, const NumericVector& lengths){
+  //input: start and end point of right index ri, riS and riE; left index li; interval system allInt with length lengths
+  //output: respective indeces of riS and riE in lengths + li -1
+
+  int iRiS, iRiE;
+
+  if(allInt == 1){
+    iRiS = riS - li;
+    iRiE = riE - li;
+  }
+  else{
+    iRiS = lengths.length();
+    iRiE = -1;
+    for(int i1 = 0; i1 < lengths.length(); i1++){
+      if(i1 == 0){
+        if(li - 1 + lengths[i1] >= riS){
+          iRiS = i1;
+        }
+      }
+      else{
+        if(li - 1 + lengths[i1 - 1] < riS && li - 1 + lengths[i1] >= riS){
+          iRiS = i1;
+        }
+      }
+      if(i1 == lengths.length() - 1){
+        if(li - 1 + lengths[i1] <= riE){
+          iRiE = i1;
+        }
+      }
+      else{
+        if(li - 1 + lengths[i1] <= riE && li - 1 + lengths[i1 + 1] > riE){
+          iRiE = i1;
+        }
+      }
+    }
+  }
+  return IntegerVector::create(iRiS, iRiE);
+}
 
 
 
