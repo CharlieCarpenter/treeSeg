@@ -175,9 +175,10 @@ treeSeg_CC<- function(formula.H0, data, K,
     lengths <- c()
     i <- 0
     while(2^i <= length(y)){
-      lengths <- c(lengths, 2^i)
+      if(2^i >=20) lengths <- c(lengths, 2^i)
       i <- i + 1
     }
+    print(lengths)
   } else if(lengths == "kernel"){
     lengths <- 20:length(y)
   }
