@@ -135,7 +135,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     
     for(i=0;i<Anc.length();i++){
       
-      // printf("Currently consider AN %d \n", Anc[i]);
+      printf("Currently consider AN %d \n", Anc[i]);
     
       //compute optimal solutions for root node Anc[i]
       IntegerVector off=offspring(Anc[i],tree);         //direct offsprings of Anc[i]
