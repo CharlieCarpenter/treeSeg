@@ -23,7 +23,7 @@ List segTree_CC(arma::mat K, arma::vec R,
     // interval system with all lengths >=20
     allInt = 0;
     
-    print("Right Spot");
+    printf("Right Spot. %i\n", allInt);
     for(int li = 1; li <= lengths.length(); li++){
       startLi.push_back( (li-1)*lengths.length() - ((li-1)*(li-2))/2 );
     }
