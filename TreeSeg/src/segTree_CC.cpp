@@ -53,6 +53,9 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   if(min(upper) >= max(lower)){
     // multiscale constraints can be satisfied without active nodes, return constant solution
+    int nn = 1;
+    printf("No Answer %i", nn);
+    
     bool noAN = 1;
     double lowerMax = max(lower);
     double upperMin = min(upper);
