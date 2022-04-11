@@ -61,11 +61,10 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   if(!tree.containsElementNamed("ancM")){
     // check whether tree contrains ancestor matrix
-    
-    int treeLine = 65;
-    printf("Line %i, treeLine", treeLine);
-    
     tree = prepTree(tree);
+    
+    int treeLine = 66;
+    printf("Line %i, treeLine", treeLine);
   }
   
   //start running treeSeg
