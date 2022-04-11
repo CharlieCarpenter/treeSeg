@@ -46,7 +46,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   // generate multiscale bounds from stepR package
   List bou = boundsCall_CC(R, lengths, alpha, q, fam);
   
-  Rcpp::print(bou["lower"]);
+  // Rcpp::print(bou["lower"]);
   
   NumericVector lower = bou["lower"];                  
   NumericVector upper = bou["upper"];
