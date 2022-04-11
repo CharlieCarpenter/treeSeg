@@ -46,6 +46,8 @@ List segTree_CC(arma::mat K, arma::vec R,
   // generate multiscale bounds from stepR package
   List bou = boundsCall_CC(R, lengths, alpha, q, fam);
   
+  Rcpp::print(bou);
+  
   NumericVector lower = bou["lower"];                  
   NumericVector upper = bou["upper"];
   
@@ -91,6 +93,10 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   //Initialize solution for leave nodes (1,.., n)
   for(i=1; i <= n; i++){
+    
+    int l = 95;
+    printf("Line %i", l)
+    
     minI[i]=0;
     optCost[i]=0;
     int ind = startLi[i - 1];
