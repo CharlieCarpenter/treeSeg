@@ -95,7 +95,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   for(i=1; i <= n; i++){
     
     int l = 95;
-    printf("Line %i", l)
+    printf("Line %i", l);
     
     minI[i]=0;
     optCost[i]=0;
