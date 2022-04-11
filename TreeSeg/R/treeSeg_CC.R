@@ -128,10 +128,9 @@ treeSeg_CC<- function(formula.H0, data, K,
   }
   
   #### prepare tree
-  if(is.null(tree$ancM)){
-    print("No ancM")
-    tree <- prepTree(tree)
-  }
+  # if(is.null(tree$ancM)){
+  #   tree <- prepTree(tree)
+  # }
   
   if(missing(fam)){
     fam = "binomial"
