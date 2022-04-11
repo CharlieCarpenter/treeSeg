@@ -37,9 +37,9 @@ List boundsCall_CC(const arma::vec x, const Rcpp::NumericVector& lengths, double
       
     }else{
       
-      int zzz=1;
-      int zz=2;
-      int z=3;
+      int zzz = 1;
+      int zz = 2;
+      int zzzz = 3;
       
       printf("In boundsCall_CC %i", zzz);
       
@@ -61,7 +61,7 @@ List boundsCall_CC(const arma::vec x, const Rcpp::NumericVector& lengths, double
       
     }
     
-    printf("In boundsCall_CC %i", z);
+    printf("In boundsCall_CC %i", zzzz);
     
     // Return test object in list structure
     return bounds[0];
