@@ -46,7 +46,7 @@ List segTree_CC(arma::mat K, arma::vec R,
   // generate multiscale bounds from stepR package
   List bou = boundsCall_CC(R, lengths, alpha, q, fam);
   
-  Rcpp::print(bou[0]);
+  Rcpp::print(bou["lower"][0]);
   
   NumericVector lower = bou["lower"];                  
   NumericVector upper = bou["upper"];
@@ -61,6 +61,10 @@ List segTree_CC(arma::mat K, arma::vec R,
   
   if(!tree.containsElementNamed("ancM")){
     // check whether tree contrains ancestor matrix
+    
+    int treeLine = 65;
+    printf("Line %i, treeLine", treeLine);
+    
     tree = prepTree(tree);
   }
   
