@@ -44,7 +44,12 @@ List prepTree(List& tree){
   int pT4 = 4;
   printf("pT4 %i \n", pT4);
   
+  int cnt = 0;
+    
   while(!flag){
+    cnt = cnt + 1;
+    printf("cnt is %i\n", cnt);
+    
     flag=true;
     for(i=0; i<tipLabel.size(); i++){
       anc[i]= ancestor(ancM(0,i), tree);
