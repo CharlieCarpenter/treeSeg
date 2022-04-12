@@ -65,7 +65,14 @@ List prepTree(List& tree){
       int hhh=3;
       printf("Here %i", hhh);
     }
+    
+    int hhhh=4;
+    printf("Here %i", hhhh);
+    
     ancM=addInMatrix(anc,ancM);
+    
+    int hhhhh=5;
+    printf("Here %i", hhhhh);
   }
   tree["ancM"]=ancM;
   
