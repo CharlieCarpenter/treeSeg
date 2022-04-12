@@ -52,8 +52,18 @@ List prepTree(List& tree){
     
     flag=true;
     for(i=0; i<tipLabel.size(); i++){
+      
+      int h=1;
+      printf("Here %i", h);
+      
       anc[i]= ancestor(ancM(0,i), tree);
+      int hh=2;
+      printf("Here %i", hh);
+      
       flag=flag&&(anc[i]==root);
+      
+      int hhh=3;
+      printf("Here %i", hhh);
     }
     ancM=addInMatrix(anc,ancM);
   }
