@@ -53,19 +53,19 @@ List prepTree(List& tree){
     flag=true;
     for(i=0; i<tipLabel.size(); i++){
       
-      // int p=1;
-      // printf("prepTree %i", p);
+      int p=1;
+      printf("prepTree %i", p);
       
       anc[i]= ancestor(ancM(0,i), tree);
       printf("anc[i] = %f", anc[i]);
       
-      // int pp=2;
-      // printf("prepTree %i", pp);
+      int pp=2;
+      printf("prepTree %i", pp);
       
       flag=flag&&(anc[i]==root);
       
-      // int ppp=3;
-      // printf("prepTree %i", ppp);
+      int ppp=3;
+      printf("prepTree %i", ppp);
     }
     
     int pppp=4;
