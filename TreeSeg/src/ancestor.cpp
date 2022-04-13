@@ -19,5 +19,9 @@ int ancestor(int node, List tree){
       }
     }
   }
+  
+  int ret = -1;
+  printf("ancestor gives %i", ret);
+  
   return -1;
 }
