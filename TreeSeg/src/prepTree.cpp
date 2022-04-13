@@ -57,7 +57,7 @@ List prepTree(List& tree){
       // printf("prepTree %i", p);
       
       anc[i]= ancestor(ancM(0,i), tree);
-      printf("anc[i] = %d", anc[i]);
+      printf("anc[i] = %f", anc[i]);
       
       // int pp=2;
       // printf("prepTree %i", pp);
